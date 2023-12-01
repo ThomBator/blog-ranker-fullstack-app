@@ -1,0 +1,45 @@
+.nav {
+  font-size: 1rem;
+
+  margin: 0rem 2rem 2rem 0rem;
+
+  color: #000;
+}
+
+.nav:hover {
+  color: #453737;
+}
+
+.appContainer {
+  height: 100vh;
+  background-color: #ffffff;
+}
+
+.navContainer {
+  display: flex;
+  padding: 1rem 0rem 1rem 0rem;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0px 5px 8px #adb5bd;
+}
+
+.mainContainer {
+  width: 50%;
+  margin: auto;
+}
+
+.logoutButton {
+  margin-left: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.logoutButton:hover {
+  transform: scale(1.1);
+}
+
+header p {
+  margin-top: -2rem;
+  margin-bottom: 2rem;
+  line-height: 1.3rem;
+  font-size: 1.1rem;
+}

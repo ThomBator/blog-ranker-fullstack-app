@@ -1,0 +1,10 @@
+POST http://localhost:5000/api/blog
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNwaWN5VCIsImlkIjoiNjQ1M2Y1OTU0OGFlMmRkMzNjNWIzNmI2IiwiaWF0IjoxNjg0MTgzMjg0LCJleHAiOjE2ODQxODY4ODR9.l3O_WhEs6vq36A-1spUB2q8qSmisGbhRu6pgBhabpR8
+
+{    "title": "Next NExt Book",
+    "author": "Douglas Coupland",
+    "url": "GFC.com", 
+    "likes": 22
+}
+

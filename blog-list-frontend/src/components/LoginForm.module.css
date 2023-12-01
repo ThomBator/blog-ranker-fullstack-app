@@ -1,0 +1,28 @@
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loginForm {
+  align-items: center;
+  box-shadow: 0px 0px 8px #828080;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 2rem auto 0rem auto;
+  min-height: 30rem;
+  width: 20rem;
+}
+
+.loginForm input {
+  margin: 0rem 0rem 1rem 1rem;
+  padding: 0.7rem;
+  border-color: #c7c7c7;
+  border-width: 0.01rem;
+  border-radius: 2px;
+}
+
+.logoutPrompt {
+  font-size: 0.8rem;
+}
