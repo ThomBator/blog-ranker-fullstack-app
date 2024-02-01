@@ -1,45 +1,52 @@
-.nav {
-  font-size: 1rem;
-
-  margin: 0rem 2rem 2rem 0rem;
-
-  color: #000;
-}
-
-.nav:hover {
-  color: #453737;
-}
-
 .appContainer {
   height: 100vh;
-  background-color: #ffffff;
+}
+
+@media screen and (max-width: 599px) {
+}
+
+@media screen and (min-width: 600px) {
+  .navContainer {
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .navElement:last-child {
+    margin-right: 2rem;
+  }
 }
 
 .navContainer {
-  display: flex;
   padding: 1rem 0rem 1rem 0rem;
-  justify-content: space-around;
-  align-items: center;
-  box-shadow: 0px 5px 8px #adb5bd;
+
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.45);
 }
 
 .mainContainer {
-  width: 50%;
+  width: 80%;
   margin: auto;
 }
 
+.navElement {
+  margin: 2rem 0rem 2rem 2rem;
+
+  text-decoration: none;
+  color: var(--darkest-color);
+}
+
+.navElement:hover {
+  text-decoration: underline;
+  color: var(--dark-color);
+}
+
 .logoutButton {
-  margin-left: 1rem;
+  margin: 2rem 0rem 2rem 2rem;
   transition: transform 0.3s ease;
+  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
 }
 
 .logoutButton:hover {
   transform: scale(1.1);
-}
-
-header p {
-  margin-top: -2rem;
-  margin-bottom: 2rem;
-  line-height: 1.3rem;
-  font-size: 1.1rem;
 }

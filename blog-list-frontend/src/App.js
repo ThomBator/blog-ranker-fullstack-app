@@ -37,15 +37,15 @@ const App = () => {
     <div className={styles.appContainer}>
       <div className={styles.navContainer}>
         <nav>
-          <Link className={styles.nav} to="/">
+          <Link className={styles.navElement} to="/">
             Home
           </Link>
-          <Link className={styles.nav} to="/users">
+          <Link className={styles.navElement} to="/users">
             Users
           </Link>
         </nav>
         <nav>
-          <p>
+          <span className={styles.navElement}>
             {user.name} is logged in{" "}
             <button
               className={styles.logoutButton}
@@ -54,7 +54,7 @@ const App = () => {
             >
               Logout
             </button>
-          </p>
+          </span>
         </nav>
       </div>
       <div className={styles.mainContainer}>
