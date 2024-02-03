@@ -1,8 +1,52 @@
 :root {
-  --primary-color: #00a6fb;
-  --darkest-color: #051923;
-  --dark-color: #003554;
-  --medium-color: #006494;
-  --light-color: #0582ca;
-  --lightest-color: #f3f9ff;
+  /*Color variables*/
+  /* Color variables */
+  --primary-color: #00607a; /* A contrasting blue color */
+  --darkest-color: #0d0d0d; /* Darker than black */
+  --dark-color: #333333; /* A standard dark gray */
+  --medium-color: #666666; /* A medium gray */
+  --light-color: #cccccc; /* A light gray */
+  --lightest-color: #f2f2f2; /* Very light gray */
+
+  /*Margin Variables*/
+  --margin-0: 0rem;
+  --margin-1: 0.25rem;
+  --margin-2: 0.5rem;
+  --margin-3: 1rem;
+  --margin-4: 1.5rem;
+  --margin-5: 2rem;
+  --margin-6: 2.5rem;
+  --margin-7: 3rem;
+  --margin-8: 4rem;
+  --margin-9: 6rem;
+  --margin-10: 8rem;
+
+  /*Padding Variables*/
+
+  -padding-0: 0rem;
+  --padding-1: 0.25rem;
+  --padding-2: 0.5rem;
+  --padding-3: 1rem;
+  --padding-4: 1.5rem;
+  --padding-5: 2rem;
+  --padding-6: 2.5rem;
+  --padding-7: 3rem;
+  --padding-8: 4rem;
+  --padding-9: 6rem;
+  --padding-10: 8rem;
+
+  /*Font-size variables*/
+  --font-xs: 0.8rem;
+  --font-s: 1rem;
+  --font-m: 1.5rem;
+  --font-l: 2rem;
+  --font-xl: 2.5rem;
+  --font-xxl: 3rem;
+  /*Font-weight variables*/
+  --font-regular: 500;
+  --font-bold: 700;
+  /* Box shadow variables */
+  --box-shadow-small: 0 2px 4px var(--medium-color, rgba(0, 0, 0, 0.1));
+  --box-shadow-medium: 0 4px 8px var(--medium-color, rgba(0, 0, 0, 0.2));
+  --box-shadow-large: 0 8px 16px var(--medium-color, rgba(0, 0, 0, 0.3));
 }

@@ -67,7 +67,11 @@ const BlogForm = () => {
           />
         </div>
         <div>
-          <button className={styles.buttonStyle} id="blogSubmit" type="submit">
+          <button
+            className={`${styles.buttonStyle} primaryButton`}
+            id="blogSubmit"
+            type="submit"
+          >
             add
           </button>
         </div>

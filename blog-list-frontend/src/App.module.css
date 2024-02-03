@@ -18,10 +18,16 @@
   }
 }
 
-.navContainer {
+.navBackground {
   padding: 1rem 0rem 1rem 0rem;
+  background-color: var(--primary-color);
 
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.45);
+}
+
+.navContainer {
+  width: 80%;
+  margin: auto;
 }
 
 .mainContainer {
@@ -31,22 +37,20 @@
 
 .navElement {
   margin: 2rem 0rem 2rem 2rem;
-
+  font-size: var(--font-m);
   text-decoration: none;
-  color: var(--darkest-color);
+  color: var(--lightest-color);
+  font-weight: var(--font-bold);
 }
 
-.navElement:hover {
+.interactiveNavElement:hover {
   text-decoration: underline;
   color: var(--dark-color);
 }
 
 .logoutButton {
-  margin: 2rem 0rem 2rem 2rem;
-  transition: transform 0.3s ease;
-  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-}
-
-.logoutButton:hover {
-  transform: scale(1.1);
+  font-size: var(--font-s);
+  margin-left: var(--margin-2);
+  padding-block: var(--padding-2);
+  padding-inline: var(--padding-3);
 }

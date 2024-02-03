@@ -35,32 +35,40 @@ const App = () => {
 
   return (
     <div className={styles.appContainer}>
-      <div className={styles.navContainer}>
-        <nav>
-          <Link className={styles.navElement} to="/">
-            Home
-          </Link>
-          <Link className={styles.navElement} to="/users">
-            Users
-          </Link>
-        </nav>
-        <nav>
-          <span className={styles.navElement}>
-            {user.name} is logged in{" "}
-            <button
-              className={styles.logoutButton}
-              type="button"
-              onClick={logOut}
+      <div className={styles.navBackground}>
+        <div className={styles.navContainer}>
+          <nav>
+            <Link
+              className={`${styles.navElement} ${styles.interactiveNavElement}`}
+              to="/"
             >
-              Logout
-            </button>
-          </span>
-        </nav>
+              Home
+            </Link>
+            <Link
+              className={`${styles.navElement} ${styles.interactiveNavElement}`}
+              to="/users"
+            >
+              Users
+            </Link>
+          </nav>
+          <nav>
+            <span className={styles.navElement}>
+              {user.name} is logged in{" "}
+              <button
+                className={`${styles.logoutButton} secondaryButton`}
+                type="button"
+                onClick={logOut}
+              >
+                Logout
+              </button>
+            </span>
+          </nav>
+        </div>
       </div>
       <div className={styles.mainContainer}>
         <header>
           <h1>Blog Ranker</h1>
-          <p>
+          <p className={`subheading`}>
             The perfect place to share your favourite blogs from around the web.
             Blogs with the most likes get top ranking!
           </p>
@@ -68,7 +76,7 @@ const App = () => {
 
         <Notification />
         <div>
-          <Toggleable buttonLabel="Add Blog" ref={blogFormRef}>
+          <Toggleable buttonLabel="Share a new blog" ref={blogFormRef}>
             <BlogForm />
           </Toggleable>
         </div>
