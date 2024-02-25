@@ -2,9 +2,10 @@ import React from "react";
 import { createContext, useReducer, useContext } from "react";
 import PropTypes from "prop-types";
 import loginService from "../services/login";
+import userService from "../services/users";
 import storageService from "../services/storage";
 
-//create reducer
+//The reducer is structured to update state based on specified actions.
 const loginReducer = (state, action) => {
   switch (action.type) {
     case "SET":
@@ -14,10 +15,12 @@ const loginReducer = (state, action) => {
   }
 };
 
-//create context
+//Contexts allow you to manage state across all or part of your component tree in one central location. They take a reducer as an argument.
+
 const UserContext = createContext();
 
 //create ContextProvider
+//Context Providers wrap parts of your component tree and make the state from that context available in that portion of the component tree.
 
 export const UserContextProvider = (props) => {
   const [user, userDispatch] = useReducer(loginReducer, null);
@@ -33,12 +36,12 @@ UserContextProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-//create and useUser custom hook
+//these are called "context hooks"
 export const useUser = () => {
   const [value] = useContext(UserContext);
   if (!UserContext) {
     throw new Error(
-      "useUserValue must be used within UserContextProvider portio of the component tree"
+      "useUserValue must be used within UserContextProvider portion of the component tree"
     );
   }
   return value;
@@ -56,7 +59,20 @@ export const useLogin = () => {
   };
 };
 
-//I am unclear why this function would be async. There is no talking to the server.
+export const useSignUp = () => {
+  //use context returns the current state and the dispatch function to change the state.
+  //In this use case only the dispatch function is needed.
+  const [, dispatch] = useContext(UserContext);
+  return async (credentials) => {
+    const user = await userService.signUp(credentials);
+    dispatch({
+      type: "SET",
+      payload: user,
+    });
+    storageService.saveUser(user);
+  };
+};
+//This one doesn't actually need to be async as it just accesses localStorage. But it is my understanding that it is better to make it async in case I need to add server-side interactions in the future.
 export const useLogout = () => {
   const [, dispatch] = useContext(UserContext);
   return async () => {

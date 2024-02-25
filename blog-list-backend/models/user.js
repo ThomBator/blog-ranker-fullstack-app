@@ -8,12 +8,15 @@ const userSchema = mongoose.Schema({
     unique: true,
     minlength: 3,
   },
-  name: String,
+
   passwordHash: String,
   blogs: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Blog",
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Blog",
+      },
+      votes: { type: Number, default: 0 },
     },
   ],
 });

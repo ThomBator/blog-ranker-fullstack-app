@@ -1,34 +1,41 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useLogin, useUser } from "../contexts/userContext";
+import { useSignUp, useUser } from "../contexts/userContext";
 import { useField } from "../hooks/index";
 import { useNotificationDispatch } from "../contexts/notificationContext";
 import { Link } from "react-router-dom";
 import styles from "./LoginForm.module.css";
 
-const LoginForm = () => {
-  //doLogin takes a user object to pass to backend for authentication
-  const doLogin = useLogin();
+const SignUpForm = () => {
+  //doSignUp takes a user object to pass to backend for authentication
+  const doSignUp = useSignUp();
   const user = useUser();
   //used to redirect the page if a user is already logged in
   const navigate = useNavigate();
   //custom hook to manage and update state for input fields
   const username = useField("text");
   const password = useField("password");
+  const reEnterPassword = useField("password");
   //dispatch notifications
   const notifyWith = useNotificationDispatch();
   //useLogin customhook is async as it communicates with server
   //so the handler has to be async as well
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      await doLogin({
-        username: username.value,
-        password: password.value,
-      });
-      notifyWith("Login Successful");
-    } catch (error) {
-      notifyWith("Error. Invalid credentials");
+    if (password.value != reEnterPassword.value) {
+      notifyWith("Error. Passwords do not match");
+    } else {
+      try {
+        await doSignUp({
+          username: username.value,
+          password: password.value,
+        });
+        notifyWith("Login Successful");
+      } catch (error) {
+        notifyWith(
+          "Error. An account with this username or email already exists. Please try again"
+        );
+      }
     }
   };
 
@@ -38,16 +45,26 @@ const LoginForm = () => {
 
   return (
     <div className={styles.loginContainer}>
-      <h1>Welcome to Story Ranker</h1>
+      <h1>Sign up for Story Ranker</h1>
+      <p>
+        Create an account to post stories, leave comments and vote on other
+        users&apos; posts.
+      </p>
       <form className={styles.loginForm} onSubmit={handleSubmit}>
         <div className={styles.loginPrompt}>
           <h2>Sign in</h2>
         </div>
-        <div>
+        <div className="formInput">
+          <label htmlFor="username">Username</label>
           <input id="username" placeholder="Username" {...username} />
         </div>
-        <div>
+        <div className="formInput">
+          <label htmlFor="password">Password</label>
           <input id="password" placeholder="Password" {...password} />
+        </div>
+        <div className="formInput">
+          <label htmlFor="password">Re-enter password</label>
+          <input id="password" placeholder="Password" {...reEnterPassword} />
         </div>
         <div>
           <button id="login-button" type="submit">
@@ -56,7 +73,7 @@ const LoginForm = () => {
         </div>
         <div className={styles.logoutPrompt}>
           <p>
-            Don&apos;t have an account? <Link to="/signup">Sign up here.</Link>
+            Already have an account? <Link to="/login">Login</Link>
           </p>
         </div>
       </form>
@@ -64,4 +81,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignUpForm;

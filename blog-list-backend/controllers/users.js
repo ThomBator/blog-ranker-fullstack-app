@@ -1,9 +1,9 @@
 const bycrypt = require("bcrypt");
 const usersRouter = require("express").Router();
 const User = require("../models/user");
-
+//Add a new user
 usersRouter.post("/", async (request, response) => {
-  const { username, name, password } = request.body;
+  const { username, password } = request.body;
 
   if (!password || !username) {
     return response
@@ -16,12 +16,20 @@ usersRouter.post("/", async (request, response) => {
       .status(400)
       .json({ error: "Password must be 3 or more characters" });
   }
+
+  const existingUser = await User.findOne({ username });
+
+  if (existingUser) {
+    return response
+      .status(400)
+      .json({ error: "Username already exists. Please choose another." });
+  }
+
   const saltRounds = 10;
   const passwordHash = await bycrypt.hash(password, saltRounds);
 
   const user = new User({
     username,
-    name,
     passwordHash,
   });
 

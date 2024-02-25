@@ -1,12 +1,11 @@
 import React from "react";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import Blog from "./components/Blog";
-import Blogs from "./components/BlogList";
+import Home from "./components/Home";
 import LoginForm from "./components/LoginForm";
-import BlogForm from "./components/BlogForm";
+import SignUpForm from "./components/SignUpForm";
 import Users from "./components/Users";
 import Notification from "./components/Notifications";
-import Toggleable from "./components/Toggleable";
 import User from "./components/User";
 import { Routes, Route, Link } from "react-router-dom";
 import { useUser, useInitUser, useLogout } from "./contexts/userContext";
@@ -16,8 +15,6 @@ const App = () => {
   const user = useUser();
   const logout = useLogout();
   const initUser = useInitUser();
-
-  const blogFormRef = useRef();
 
   const logOut = () => {
     logout();
@@ -29,15 +26,11 @@ const App = () => {
     initUser();
   }, []);
 
-  if (!user) {
-    return <LoginForm />;
-  }
-
   return (
     <div className={styles.appContainer}>
       <div className={styles.navBackground}>
         <div className={styles.navContainer}>
-          <nav>
+          <nav className={styles.navGroup}>
             <Link
               className={`${styles.navElement} ${styles.interactiveNavElement}`}
               to="/"
@@ -51,42 +44,48 @@ const App = () => {
               Users
             </Link>
           </nav>
-          <nav>
-            <span className={styles.navElement}>
-              {user.name} is logged in{" "}
+          {user && (
+            <nav>
+              <span className={styles.navElement}>
+                {user.username} is logged in{" "}
+              </span>
               <button
-                className={`${styles.logoutButton} secondaryButton`}
+                className={`${styles.logoutButton} zero ttsecondaryButton`}
                 type="button"
                 onClick={logOut}
               >
                 Logout
               </button>
-            </span>
-          </nav>
+            </nav>
+          )}
+
+          {!user && (
+            <nav>
+              <span className={styles.navElement}>
+                You are currently logged out
+              </span>
+              <Link to="/login" className={styles.navElement}>
+                <button
+                  className={`${styles.logoutButton} secondaryButton`}
+                  type="button"
+                >
+                  Login to post, vote & comment
+                </button>
+              </Link>
+            </nav>
+          )}
         </div>
       </div>
       <div className={styles.mainContainer}>
-        <header>
-          <h1>Blog Ranker</h1>
-          <p className={`subheading`}>
-            The perfect place to share your favourite blogs from around the web.
-            Blogs with the most likes get top ranking!
-          </p>
-        </header>
-
         <Notification />
-        <div>
-          <Toggleable buttonLabel="Share a new blog" ref={blogFormRef}>
-            <BlogForm />
-          </Toggleable>
-        </div>
 
         <Routes>
-          <Route path="/" element={<Blogs />} />
+          <Route path="/" element={<Home />} />
           <Route path="/blogs/:id" element={<Blog />} />
           <Route path="/users" element={<Users />} />
           <Route path="/users/:id" element={<User />} />
           <Route path="/login" element={<LoginForm />} />
+          <Route path="/signup" element={<SignUpForm />} />
         </Routes>
       </div>
 

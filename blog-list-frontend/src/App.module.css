@@ -2,27 +2,28 @@
   height: 100vh;
 }
 
-@media screen and (max-width: 599px) {
+@media screen and (max-width: 899px) {
+  .navElement {
+    display: block;
+    margin-bottom: var(--margin-2);
+  }
 }
-
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 900px) {
   .navContainer {
-    font-size: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
   .navElement:last-child {
-    margin-right: 2rem;
+    margin-inline: var(--margin-2);
   }
 }
 
 .navBackground {
-  padding: 1rem 0rem 1rem 0rem;
+  padding: 1rem;
   background-color: var(--primary-color);
-
-  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--box-shadow-small);
 }
 
 .navContainer {
@@ -36,8 +37,9 @@
 }
 
 .navElement {
-  margin: 2rem 0rem 2rem 2rem;
-  font-size: var(--font-m);
+  margin-right: var(--margin-4);
+
+  font-size: var(--font-s);
   text-decoration: none;
   color: var(--lightest-color);
   font-weight: var(--font-bold);
@@ -45,12 +47,12 @@
 
 .interactiveNavElement:hover {
   text-decoration: underline;
-  color: var(--dark-color);
+  color: var(--light-color);
 }
 
 .logoutButton {
-  font-size: var(--font-s);
-  margin-left: var(--margin-2);
-  padding-block: var(--padding-2);
+  font-size: var(--font-xs);
+
+  padding-block: var(--padding-1);
   padding-inline: var(--padding-3);
 }
