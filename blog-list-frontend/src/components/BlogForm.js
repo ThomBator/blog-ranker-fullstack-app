@@ -63,6 +63,7 @@ const BlogForm = () => {
             id="url"
             name="url"
             value={url}
+            type="url"
             onChange={(event) => setUrl(event.target.value)}
           />
         </div>

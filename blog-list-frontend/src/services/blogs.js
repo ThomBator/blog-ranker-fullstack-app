@@ -1,5 +1,6 @@
 import axios from "axios";
 const baseUrl = "/api/blog";
+import storageService from "./storage";
 
 const getAll = async () => {
   const request = axios.get(baseUrl);
@@ -11,22 +12,32 @@ const getOne = async (id) => {
   return response.data;
 };
 
-const addComment = async (id, comment) => {
-  const response = await axios.post(`${baseUrl}/${id}/comments`, { comment });
+const addComment = async (id, comment, user) => {
+  const response = await axios.post(`${baseUrl}/${id}/comments`, {
+    comment,
+    user,
+  });
   return response.data;
 };
 
 const create = async (newObject, token) => {
   console.log("Token in blog service", token);
-  if (token) {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
-    const response = await axios.post(baseUrl, newObject, config);
+  try {
+    if (token) {
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const response = await axios.post(baseUrl, newObject, config);
 
-    return response.data;
-  } else {
-    console.log("token not found: ", token);
+      return response.data;
+    } else {
+      throw new Error("Token not found");
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      console.log("Token is unauthorized or expired");
+      storageService.removeUser();
+    }
   }
 };
 

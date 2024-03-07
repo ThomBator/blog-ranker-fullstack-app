@@ -2,7 +2,7 @@ import blogService from "../services/blogs";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { useUser } from "../contexts/userContext";
+// import { useUser } from "../contexts/userContext";
 
 const Blog = () => {
   const id = useParams().id;
@@ -17,7 +17,7 @@ const Blog = () => {
   const [comment, setComment] = useState("");
   //existing comments already appended to blog
   const comments = blog?.comments || null;
-  const user = useUser();
+  // const user = useUser();
   const update = blogService.update;
   const addComment = blogService.addComment;
   const queryClient = useQueryClient();
@@ -30,11 +30,11 @@ const Blog = () => {
     marginBottom: 5,
   };
 
-  const removeBlogMutation = useMutation((id) => blogService.remove(id), {
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["blogs"] });
-    },
-  });
+  // const removeBlogMutation = useMutation((id) => blogService.remove(id), {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["blogs"] });
+  //   },
+  // });
 
   const updateBlogMutation = useMutation(([id, blog]) => update(id, blog), {
     onSuccess: () => {
@@ -47,7 +47,7 @@ const Blog = () => {
   });
 
   const addCommentMutation = useMutation(
-    ([id, comment]) => addComment(id, comment),
+    ([id, comment, user]) => addComment(id, comment, user),
     {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["blogs"] });
@@ -58,11 +58,11 @@ const Blog = () => {
     }
   );
 
-  const handleRemove = () => {
-    if (window.confirm("Are you sure you want to delete this blog?")) {
-      removeBlogMutation.mutate(blog.id);
-    }
-  };
+  // const handleRemove = () => {
+  //   if (window.confirm("Are you sure you want to delete this blog?")) {
+  //     removeBlogMutation.mutate(blog.id);
+  //   }
+  // };
 
   const handleAddLike = () => {
     updateBlogMutation.mutate([blog.id, { ...blog, likes: likes + 1 }]);
@@ -98,15 +98,13 @@ const Blog = () => {
         </p>
       </div>
 
-      <p>Added By: {user.name}</p>
-
-      {user.id === blog.user.id && (
+      {/* {user.id === blog.user.id && (
         <div>
           <button type="button" onClick={handleRemove}>
             delete
           </button>
         </div>
-      )}
+      )} */}
 
       <br />
 
@@ -121,7 +119,9 @@ const Blog = () => {
         (comments.length === 0 && <p>No comments yet. Please add one!</p>)}
       <ul>
         {comments.length > 0 &&
-          comments.map((comment) => <li key={comment}>{comment}</li>)}
+          comments.map((comment) => (
+            <li key={comment._id}>{comment.comment}</li>
+          ))}
       </ul>
     </div>
   );

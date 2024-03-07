@@ -1,17 +1,36 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import styles from "./BlogLink.module.css";
+import { useUser } from "../contexts/userContext";
 
 function BlogLink({ blog }) {
+  const user = useUser();
+
+  let shortURL = "";
+
+  try {
+    const fullURL = new URL(blog.url);
+    shortURL = fullURL.hostname.replace(/^www\./, "");
+  } catch {
+    shortURL = blog.url;
+  }
   return (
-    <div>
-      <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-      <p>{blog.url}</p>
-      <p>{blog.likes} likes</p>
-      <p>posted by {blog.user.username}</p>
-      <button>Upvote</button>
-      <button>Downvote</button>
-      <p>Votes {blog.likes}</p>
+    <div className={styles.blogLinkContainer}>
+      <div className={styles.linkInfo}>
+        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+        <p>({shortURL})</p>
+      </div>
+
+      <div className={styles.voteInfo}>
+        <p>Votes: {blog.likes}</p>
+        <button>Upvote</button>
+        <button>Downvote</button>
+      </div>
+      <div className={styles.userInfo}>
+        <p>posted by {blog.user.username}</p>
+        {user && user.id === blog.user.id && <Link to="#">delete</Link>}
+      </div>
     </div>
   );
 }

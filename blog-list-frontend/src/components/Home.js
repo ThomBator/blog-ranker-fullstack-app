@@ -46,14 +46,15 @@ const Home = () => {
         </div>
       )}
 
-      {blogs.sort(byLikes).map((blog) => (
-        <div className={styles.listItem} key={blog.id}>
-          {/*<Link to={`/blogs/${blog.id}`}>
+      {blogs &&
+        blogs.sort(byLikes).map((blog) => (
+          <div className={styles.listItem} key={blog.id}>
+            {/*<Link to={`/blogs/${blog.id}`}>
             {blog.title} by {blog.author}
       </Link>*/}
-          <BlogLink blog={blog} />
-        </div>
-      ))}
+            <BlogLink blog={blog} />
+          </div>
+        ))}
     </div>
   );
 };
