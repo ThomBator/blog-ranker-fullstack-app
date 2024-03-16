@@ -3,9 +3,14 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styles from "./BlogLink.module.css";
 import { useUser } from "../contexts/userContext";
+import blogService from "../services/blogs";
+import { useMutation, useQueryClient } from "react-query";
+import { useNotificationDispatch } from "../contexts/notificationContext";
 
 function BlogLink({ blog }) {
   const user = useUser();
+  const remove = blogService.remove;
+  const notifyWith = useNotificationDispatch();
 
   let shortURL = "";
 
@@ -15,6 +20,24 @@ function BlogLink({ blog }) {
   } catch {
     shortURL = blog.url;
   }
+  //actually invaludates the the cache data so it can be refreshed from server
+  const queryClient = useQueryClient();
+
+  //This is the hook that will allow for the cache to be invalidated, but only if the REST API call is succesful
+  const removeBlogMutation = useMutation(([id]) => remove(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["blogs"] });
+      notifyWith("Blog post successfully deleted");
+    },
+    onError: () => {
+      notifyWith("Blog deletion error. Contact site administrator");
+    },
+  });
+
+  const handleDelete = () => {
+    removeBlogMutation.mutate([blog.id]);
+  };
+
   return (
     <div className={styles.blogLinkContainer}>
       <div className={styles.linkInfo}>
@@ -29,14 +52,16 @@ function BlogLink({ blog }) {
       </div>
       <div className={styles.userInfo}>
         <p>posted by {blog.user.username}</p>
-        {user && user.id === blog.user.id && <Link to="#">delete</Link>}
+        {user && user.id === blog.user.id && (
+          <button onClick={() => handleDelete()}>delete</button>
+        )}
       </div>
     </div>
   );
 }
 
 BlogLink.propTypes = {
-  blog: {
+  blog: PropTypes.shape({
     title: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
@@ -44,7 +69,7 @@ BlogLink.propTypes = {
     comments: PropTypes.array.isRequired,
     user: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
-  },
+  }).isRequired,
 };
 
 export default BlogLink;
