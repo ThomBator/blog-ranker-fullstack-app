@@ -5,13 +5,14 @@ const blogSchema = new mongoose.Schema({
   title: { type: String, required: true },
   author: { type: String, required: true },
   url: { type: String, required: true },
-  likes: { type: Number, required: true },
+  votes: { type: Number, required: true },
   //Every comment must be associated with a logged in user, so associating a user with the comment here
   //I am aware that this might cause performance issues in a truly large app
   // In a bigger app I would make a separate collection just for the comments and have them associated back to each blog and user
   //May add at functionality here in future iterations
   comments: [
     {
+      _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
       comment: { type: String, maxLength: 255 },
       user: {
         type: mongoose.Schema.Types.ObjectId,

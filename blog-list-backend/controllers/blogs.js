@@ -43,17 +43,20 @@ blogRouter.post("/", async (request, response) => {
       title: body.title,
       author: body.author,
       url: body.url,
-      likes: 0,
+      votes: 0,
       user: user._id,
     });
 
     const savedBlog = await blog.save();
-    user.blogs = user.blogs.concat(savedBlog._id);
+    user.blogs = user.blogs.concat({
+      _id: savedBlog._id,
+      votes: savedBlog.votes,
+    });
     await user.save();
 
     response.status(201).json(savedBlog);
   } else {
-    response.status(400);
+    response.status(400).json({ error: "Blog post failed" });
   }
 });
 
@@ -79,7 +82,7 @@ blogRouter.put("/:id", async (request, response) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes,
+    votes: body.votes,
   };
 
   console.log("BLOGS FROM PUT ROUTE", request);
@@ -91,7 +94,21 @@ blogRouter.put("/:id", async (request, response) => {
 });
 
 blogRouter.delete("/:id", async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id);
+  const deletedBlog = await Blog.findByIdAndRemove(request.params.id);
+  console.log(deletedBlog);
+
+  const user = await User.findById(deletedBlog.user);
+
+  console.log("User ", user);
+
+  if (!user) {
+    return response.status(404).json({ error: "User not found" });
+  }
+
+  user.blogs = user.blogs.filter((blog) => !blog._id.equals(deletedBlog._id));
+
+  await user.save();
+
   response.status(204).end();
 });
 

@@ -46,7 +46,7 @@ function BlogLink({ blog }) {
       </div>
 
       <div className={styles.voteInfo}>
-        <p>Votes: {blog.likes}</p>
+        <p>Votes: {blog.votes}</p>
         <button>Upvote</button>
         <button>Downvote</button>
       </div>
@@ -65,7 +65,7 @@ BlogLink.propTypes = {
     title: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
-    likes: PropTypes.number.isRequired,
+    votes: PropTypes.number.isRequired,
     comments: PropTypes.array.isRequired,
     user: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,

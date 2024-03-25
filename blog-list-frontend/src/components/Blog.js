@@ -12,7 +12,7 @@ const Blog = () => {
     isLoading,
     isError,
   } = useQuery(["blogs", id], () => blogService.getOne(id));
-  const [likes, setLikes] = useState(blog ? blog.likes : 0);
+  const [votes, setVotes] = useState(blog ? blog.votes : 0);
   //new comment being added to blog
   const [comment, setComment] = useState("");
   //existing comments already appended to blog
@@ -39,7 +39,7 @@ const Blog = () => {
   const updateBlogMutation = useMutation(([id, blog]) => update(id, blog), {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["blogs"] });
-      setLikes(likes + 1);
+      setVotes(votes + 1);
     },
     onError: (error) => {
       console.log("error: ", error);
@@ -64,8 +64,15 @@ const Blog = () => {
   //   }
   // };
 
-  const handleAddLike = () => {
-    updateBlogMutation.mutate([blog.id, { ...blog, likes: likes + 1 }]);
+  const handleUpVote = () => {
+    updateBlogMutation.mutate([blog.id, { ...blog, votes: votes + 1 }]);
+  };
+
+  const handleDownVote = () => {
+    updateBlogMutation.mutate([
+      blog.id,
+      { ...blog, votes: votes > 0 ? votes - 1 : 0 },
+    ]);
   };
 
   const handleAddComment = () => {
@@ -88,12 +95,16 @@ const Blog = () => {
 
       <p>URL: {blog.url} </p>
 
-      <div id="likes">
+      <div>
         {" "}
         <p>
-          Likes: {likes}{" "}
-          <button type="button" onClick={handleAddLike}>
-            like
+          votes: {votes}{" "}
+          {/* this needs to be refactored for upvotes and downvotes*/}
+          <button type="button" onClick={handleUpVote}>
+            upvote
+          </button>{" "}
+          <button type="button" onClick={handleDownVote}>
+            downvote
           </button>{" "}
         </p>
       </div>
