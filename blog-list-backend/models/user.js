@@ -16,7 +16,6 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Blog",
       },
-      votes: { type: Number, default: 0 },
     },
   ],
 });

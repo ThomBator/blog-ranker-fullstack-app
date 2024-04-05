@@ -46,7 +46,8 @@ function BlogLink({ blog }) {
       </div>
 
       <div className={styles.voteInfo}>
-        <p>Votes: {blog.votes}</p>
+        {/*remember that blog.votes is an object that contains user metadata so we can limit the number of votes an individual user can make. So the actual votes value is at blog.votes.totalVotes*/}
+        <p>Votes: {blog.votes.totalVotes}</p>
         <button>Upvote</button>
         <button>Downvote</button>
       </div>
@@ -65,7 +66,10 @@ BlogLink.propTypes = {
     title: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
-    votes: PropTypes.number.isRequired,
+    votes: PropTypes.shape({
+      totalVotes: PropTypes.number.isRequired,
+      users: PropTypes.array.isRequired,
+    }),
     comments: PropTypes.array.isRequired,
     user: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,

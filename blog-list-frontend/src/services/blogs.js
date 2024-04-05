@@ -20,14 +20,13 @@ const addComment = async (id, comment, user) => {
   return response.data;
 };
 
-const create = async (newObject, token) => {
-  console.log("Token in blog service", token);
+const create = async (blog, token) => {
   try {
     if (token) {
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
-      const response = await axios.post(baseUrl, newObject, config);
+      const response = await axios.post(baseUrl, blog, config);
 
       return response.data;
     } else {

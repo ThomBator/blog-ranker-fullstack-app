@@ -38,12 +38,16 @@ blogRouter.post("/", async (request, response) => {
 
   const user = await User.findById(decodedToken.id);
 
+  if (!user) {
+    return response.status(404).json({ error: "user not found" });
+  }
+
   if (body.title && body.url && body.author) {
     const blog = new Blog({
       title: body.title,
       author: body.author,
       url: body.url,
-      votes: 0,
+      votes: { totalVotes: 0, users: [] },
       user: user._id,
     });
 
@@ -76,6 +80,7 @@ blogRouter.post("/:id/comments", async (request, response) => {
   response.json(blog);
 });
 
+//will be used for updating votes
 blogRouter.put("/:id", async (request, response) => {
   const body = request.body;
   const blog = {
