@@ -38,6 +38,7 @@ usersRouter.post("/", async (request, response) => {
   response.status(201).json(savedUser);
 });
 
+//returns a list of all users
 usersRouter.get("/", async (request, response) => {
   const users = await User.find({}).populate("blogs", {
     url: 1,
@@ -49,6 +50,8 @@ usersRouter.get("/", async (request, response) => {
   response.json(users);
 });
 
+
+//returns a specific user 
 usersRouter.get("/:id", async (request, response) => {
   const user = await User.findById(request.params.id).populate("blogs", {
     url: 1,

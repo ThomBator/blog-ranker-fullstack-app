@@ -29,8 +29,9 @@ function BlogLink({ blog }) {
       queryClient.invalidateQueries({ queryKey: ["blogs"] });
       notifyWith("Blog post successfully deleted");
     },
-    onError: () => {
+    onError: (error) => {
       notifyWith("Blog deletion error. Contact site administrator");
+      console.log("Blog Deletion Error: ", error);
     },
   });
 
