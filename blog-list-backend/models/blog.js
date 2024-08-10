@@ -8,14 +8,14 @@ const blogSchema = new mongoose.Schema({
   //My goal with the construction of the votes part of the schema is to limit the number of votes each user can make.
   //Front-end logic will ensure that users can only hold a value of 1, 0 or -1 so that users can only upvote or downvote once essentially.
   votes: {
-    totalVotes: { type: Number, required: true },
     users: [
       {
-        user: {
+        id: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
+          index: true,
         },
-        vote: { type: Number, required: true },
+        vote: { type: Number, required: true, enum: [-1, 1] },
       },
     ],
   },

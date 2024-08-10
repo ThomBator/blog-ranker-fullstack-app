@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import loginService from "../services/login";
 import userService from "../services/users";
 import storageService from "../services/storage";
+import checkIfTokenIsExpired from "../services/token";
 
 //The reducer is structured to update state based on specified actions.
 const loginReducer = (state, action) => {
@@ -40,23 +41,21 @@ UserContextProvider.propTypes = {
 
 //allows a component to use a user if that state is held in the UserContext
 export const useUser = () => {
-  const [value] = useContext(UserContext);
-  if (!UserContext) {
-    throw new Error(
-      "useUserValue must be used within UserContextProvider portion of the component tree"
-    );
-  }
-  if (value.loginTime) {
-    //Check whether user's token will still be validated on server side
-    //The token expires sever-side after 1 hour (3600 seconds)
-    const currentTime = Date.now();
+  const [user, dispatch] = useContext(UserContext);
 
-    if (currentTime / 1000 - value.loginTime / 1000 > 3600) {
+  if (user) {
+    const isTokenExpired = checkIfTokenIsExpired(user.token);
+
+    if (isTokenExpired) {
+      dispatch({
+        type: "CLEAR",
+      });
+      storageService.removeUser();
       return null;
     }
   }
 
-  return value;
+  return user;
 };
 
 export const useLogin = () => {
@@ -100,14 +99,20 @@ export const useInitUser = () => {
   const [, dispatch] = useContext(UserContext);
   return async () => {
     const user = await storageService.loadUser();
-    //Append a time to user to ensure that users are auto logged out in alignment with time the token will expire on sever
-    user.loginTime = Date.now();
 
     if (user) {
-      dispatch({
-        type: "SET",
-        payload: user,
-      });
+      const isTokenExpired = checkIfTokenIsExpired(user.token);
+      if (!isTokenExpired) {
+        dispatch({
+          type: "SET",
+          payload: user,
+        });
+      } else {
+        dispatch({
+          type: "CLEAR",
+        });
+        storageService.removeUser();
+      }
     }
   };
 };

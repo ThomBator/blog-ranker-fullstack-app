@@ -49,13 +49,24 @@ function BlogLink({ blog }) {
       <div className={styles.voteInfo}>
         {/*remember that blog.votes is an object that contains user metadata so we can limit the number of votes an individual user can make. So the actual votes value is at blog.votes.totalVotes*/}
         <p>Votes: {blog.votes.totalVotes}</p>
-        <button>Upvote</button>
-        <button>Downvote</button>
+        {user && (
+          <>
+            <button>Upvote</button>
+            <button>Downvote</button>
+          </>
+        )}
+
+        {!user && <p>(Log in to vote on posts!)</p>}
       </div>
       <div className={styles.userInfo}>
         <p>posted by {blog.user.username}</p>
         {user && user.id === blog.user.id && (
-          <button onClick={() => handleDelete()}>delete</button>
+          <button
+            className={styles.deleteButton}
+            onClick={() => handleDelete()}
+          >
+            delete
+          </button>
         )}
       </div>
     </div>
