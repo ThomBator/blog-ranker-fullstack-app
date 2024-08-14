@@ -6,11 +6,13 @@ import { useUser } from "../contexts/userContext";
 import blogService from "../services/blogs";
 import { useMutation, useQueryClient } from "react-query";
 import { useNotificationDispatch } from "../contexts/notificationContext";
+import { useVotes } from "../hooks/index";
 
-function BlogLink({ blog }) {
+const BlogLink = ({ blog }) => {
   const user = useUser();
   const remove = blogService.remove;
   const notifyWith = useNotificationDispatch();
+  const { totalVotesValue, userVote, handleVote } = useVotes(blog, user);
 
   let shortURL = "";
 
@@ -48,11 +50,15 @@ function BlogLink({ blog }) {
 
       <div className={styles.voteInfo}>
         {/*remember that blog.votes is an object that contains user metadata so we can limit the number of votes an individual user can make. So the actual votes value is at blog.votes.totalVotes*/}
-        <p>Votes: {blog.votes.totalVotes}</p>
+        <p>Votes: {totalVotesValue}</p>
         {user && (
           <>
-            <button>Upvote</button>
-            <button>Downvote</button>
+            <button onClick={() => handleVote(1)} disabled={userVote === 1}>
+              Upvote
+            </button>
+            <button onClick={() => handleVote(-1)} disabled={userVote === -1}>
+              Downvote
+            </button>
           </>
         )}
 
@@ -71,7 +77,7 @@ function BlogLink({ blog }) {
       </div>
     </div>
   );
-}
+};
 
 BlogLink.propTypes = {
   blog: PropTypes.shape({
@@ -79,7 +85,6 @@ BlogLink.propTypes = {
     author: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
     votes: PropTypes.shape({
-      totalVotes: PropTypes.number.isRequired,
       users: PropTypes.array.isRequired,
     }),
     comments: PropTypes.array.isRequired,
