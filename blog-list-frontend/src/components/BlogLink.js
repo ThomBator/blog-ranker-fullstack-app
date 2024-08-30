@@ -12,7 +12,7 @@ const BlogLink = ({ blog }) => {
   const user = useUser();
   const remove = blogService.remove;
   const notifyWith = useNotificationDispatch();
-  const { totalVotesValue, userVote, handleVote } = useVotes(blog, user);
+  const { totalVotesValue, userVote, handleVote } = useVotes(blog);
 
   let shortURL = "";
 

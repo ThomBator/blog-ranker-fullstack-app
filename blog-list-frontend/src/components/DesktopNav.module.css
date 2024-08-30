@@ -1,11 +1,6 @@
-.appContainer {
-  height: 100vh;
-}
-
 @media screen and (max-width: 1199px) {
-  .navElement {
-    display: block;
-    margin-bottom: var(--margin-2);
+  .navContainer {
+    display: none;
   }
 }
 @media screen and (min-width: 1200px) {
@@ -27,11 +22,6 @@
 }
 
 .navContainer {
-  width: 80%;
-  margin: auto;
-}
-
-.mainContainer {
   width: 80%;
   margin: auto;
 }

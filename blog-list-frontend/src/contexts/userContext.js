@@ -63,19 +63,20 @@ export const useLogin = () => {
   return async (credentials) => {
     const user = await loginService.login(credentials);
     //Append a time to user to ensure that users are auto logged out in alignment with time the token will expire on sever
-    user.loginTime = Date.now();
-    dispatch({
-      type: "SET",
-      payload: user,
-    });
+    if (user) {
+      user.loginTime = Date.now();
+      dispatch({
+        type: "SET",
+        payload: user,
+      });
+    }
 
     storageService.saveUser(user);
   };
 };
 
 export const useSignUp = () => {
-  //use context returns the current state and the dispatch function to change the state.
-  //In this use case only the dispatch function is needed.
+  //Probably should add some error handling and validation here?
   const [, dispatch] = useContext(UserContext);
   return async (credentials) => {
     const user = await userService.signUp(credentials);

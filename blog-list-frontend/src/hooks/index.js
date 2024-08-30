@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import blogService from "../services/blogs";
 import { useNotificationDispatch } from "../contexts/notificationContext";
-
+import { useUser } from "../contexts/userContext";
 import { useMutation, useQueryClient } from "react-query";
 
 const useField = (type) => {
@@ -14,12 +14,13 @@ const useField = (type) => {
   return { type, value, onChange };
 };
 
-const useVotes = (blog, currentUser) => {
+const useVotes = (blog) => {
   //The total votes for this blog and the user's current vote will be recalcualted in this hook
   const [totalVotesValue, setTotalVotesValue] = useState(0);
   const [userVote, setUserVote] = useState(0);
   const notifyWith = useNotificationDispatch();
   const queryClient = useQueryClient();
+  const currentUser = useUser();
 
   const updateVoteMutation = useMutation(
     (updatedBlog) => blogService.update(updatedBlog.id, updatedBlog),
@@ -41,12 +42,14 @@ const useVotes = (blog, currentUser) => {
     if (allUsers.length > 0) {
       allUsers.forEach((user) => (initialTotalVotes += user.vote));
 
-      const userVoteObj = allUsers.find(
-        (user) => user.id.toString() === currentUser.id.toString()
-      );
+      if (currentUser) {
+        const userVoteObj = allUsers.find(
+          (user) => user.id.toString() === currentUser.id.toString()
+        );
 
-      if (userVoteObj) {
-        setUserVote(userVoteObj.vote);
+        if (userVoteObj) {
+          setUserVote(userVoteObj.vote);
+        }
       }
 
       setTotalVotesValue(initialTotalVotes);
@@ -56,21 +59,23 @@ const useVotes = (blog, currentUser) => {
   const handleVote = (newVote) => {
     const allUsers = blog.votes.users;
     const updateUsers = (type) => {
-      if (type === "new") {
-        allUsers.push({ id: currentUser.id, vote: newVote });
-        blog.votes.users = allUsers;
-      } else if (type === "existing") {
-        const newAllUsers = allUsers.map((user) => {
-          if (user.id.toString() === currentUser.id.toString()) {
-            user.vote = newVote;
-          }
-          return user;
-        });
+      if (currentUser) {
+        if (type === "new") {
+          allUsers.push({ id: currentUser.id, vote: newVote });
+          blog.votes.users = allUsers;
+        } else if (type === "existing") {
+          const newAllUsers = allUsers.map((user) => {
+            if (user.id.toString() === currentUser.id.toString()) {
+              user.vote = newVote;
+            }
+            return user;
+          });
 
-        blog.votes.users = newAllUsers;
+          blog.votes.users = newAllUsers;
+        }
+
+        updateVoteMutation.mutate(blog);
       }
-
-      updateVoteMutation.mutate(blog);
     };
 
     //user has already upvoted in the past

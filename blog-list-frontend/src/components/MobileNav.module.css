@@ -1,22 +1,11 @@
-.appContainer {
-  height: 100vh;
-}
-
 @media screen and (max-width: 1199px) {
-  .navElement {
+  .navContainer {
     display: block;
-    margin-bottom: var(--margin-2);
   }
 }
 @media screen and (min-width: 1200px) {
   .navContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .navElement:last-child {
-    margin-inline: var(--margin-2);
+    display: none;
   }
 }
 
@@ -27,11 +16,6 @@
 }
 
 .navContainer {
-  width: 80%;
-  margin: auto;
-}
-
-.mainContainer {
   width: 80%;
   margin: auto;
 }
