@@ -1,5 +1,6 @@
 @media screen and (max-width: 1199px) {
-  .navContainer {
+  .navContainer,
+  .desktopNavBackground {
     display: none;
   }
 }
@@ -15,7 +16,7 @@
   }
 }
 
-.navBackground {
+.desktopNavBackground {
   padding: 1rem;
   background-color: var(--primary-color);
   box-shadow: var(--box-shadow-small);

@@ -1,16 +1,19 @@
 @media screen and (max-width: 1199px) {
-  .navContainer {
+  .mobileNavContainer {
     display: block;
   }
 }
 @media screen and (min-width: 1200px) {
-  .navContainer {
+  .mobileNavContainer,
+  .mobileNavBackground {
     display: none;
   }
 }
 
-.navBackground {
+.mobileNavBackground {
+  position: relative;
   padding: 1rem;
+  min-height: 5rem;
   background-color: var(--primary-color);
   box-shadow: var(--box-shadow-small);
 }

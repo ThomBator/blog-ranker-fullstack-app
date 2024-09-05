@@ -12,9 +12,9 @@ const MobileNav = () => {
     logout();
   };
   return (
-    <div className={styles.navBackground}>
+    <div className={styles.mobileNavBackground}>
       <Menu styles={hamburgerStyles}>
-        <div className={`${styles.navContainer}`}>
+        <div className={`${styles.mobileNavContainer}`}>
           <nav className={styles.navGroup}>
             <Link
               className={`${styles.navElement} ${styles.interactiveNavElement}`}

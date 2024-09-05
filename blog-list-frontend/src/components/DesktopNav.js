@@ -11,7 +11,7 @@ const DesktopNav = () => {
     logout();
   };
   return (
-    <div className={styles.navBackground}>
+    <div className={styles.desktopNavBackground}>
       <div className={styles.navContainer}>
         <nav className={styles.navGroup}>
           <Link

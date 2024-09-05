@@ -24,18 +24,23 @@ const Home = () => {
   const byLikes = (b1, b2) => b2.likes - b1.likes;
 
   return (
-    <div>
+    <div className={styles.homeContainer}>
       <header className={styles.homeHeader}>
-        <h1>Story Ranker</h1>
-        <p className={`subheading`}>
-          Share your favourite blogs and sites from around the web. Vote on
-          posts you love to help them climb the rankings!
-        </p>
-        {!user && (
-          <p>
-            <Link to="/login">Log in</Link> to post, vote and comment.
+        <div className={styles.headerText}>
+          <h1>Story Ranker</h1>
+          <p className={`subheading`}>
+            Share your favourite blogs and sites from around the web. Vote on
+            posts you love to help them climb the rankings!
           </p>
-        )}
+          {!user && (
+            <p>
+              <Link to="/login">Log in</Link> to post, vote and comment.
+            </p>
+          )}
+        </div>
+        <div className={styles.headerImgContainer}>
+          <img src="storyRankerHerov2.webp" />
+        </div>
       </header>
 
       {user && (

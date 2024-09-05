@@ -1,3 +1,9 @@
+@import url("../variables.css");
+
+.homeContainer {
+  padding: 1rem;
+}
+
 .listItem {
   margin-bottom: 0.7rem;
 }
@@ -10,9 +16,28 @@
 .homeHeader {
   min-height: 20rem;
   display: flex;
-  flex-direction: column;
+
   justify-content: center;
   border-bottom: 3px solid var(--medium-color);
   border-top: 3px solid var(--medium-color);
   margin-block: 2rem;
+}
+
+.headerImgContainer {
+  flex: 1;
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerImgContainer img {
+  width: 80%;
+  border-radius: 30px;
+  box-shadow: var(--box-shadow-small);
+}
+
+.headerText {
+  flex: 1;
+  width: 60%;
 }

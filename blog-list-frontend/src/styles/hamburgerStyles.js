@@ -1,13 +1,13 @@
 const hamburgerStyles = {
   bmBurgerButton: {
-    position: "fixed",
+    position: "absolute",
     width: "36px",
     height: "30px",
-    left: "36px",
-    top: "36px",
+    left: "50%",
+    top: "50%",
   },
   bmBurgerBars: {
-    background: "#373a47",
+    background: "#FFFFFF",
   },
   bmBurgerBarsHover: {
     background: "#a90000",
@@ -17,7 +17,7 @@ const hamburgerStyles = {
     width: "24px",
   },
   bmCross: {
-    background: "#bdc3c7",
+    background: "#FFFFFF",
   },
   bmMenuWrap: {
     position: "fixed",

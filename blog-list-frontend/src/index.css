@@ -63,7 +63,6 @@ p {
 
 button {
   font-weight: var(--font-bold);
-  border-radius: 20px;
 
   box-shadow: var(--box-shadow-small);
   transition: transform 0.3s ease-in-out;
