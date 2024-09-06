@@ -10,9 +10,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 2rem rem 3rem 2rem;
+  margin: var(--margin-5);
   min-height: 30rem;
   width: 20rem;
+  padding: 1rem;
 }
 
 .loginForm input {
@@ -24,6 +25,8 @@
   margin-top: 0.25rem;
 }
 
-.logoutPrompt {
+.signUpPrompt {
+  margin-top: var(--margin-3);
   font-size: 0.8rem;
+  text-align: center;
 }

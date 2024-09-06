@@ -50,11 +50,11 @@ const LoginForm = () => {
           <input id="password" placeholder="Password" {...password} />
         </div>
         <div>
-          <button id="login-button" type="submit">
+          <button id="login-button" className="secondaryButton" type="submit">
             login
           </button>
         </div>
-        <div className={styles.logoutPrompt}>
+        <div className={styles.signUpPrompt}>
           <p>
             Don&apos;t have an account? <Link to="/signup">Sign up here.</Link>
           </p>

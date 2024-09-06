@@ -17,13 +17,12 @@
 }
 
 .desktopNavBackground {
-  padding: 1rem;
   background-color: var(--primary-color);
   box-shadow: var(--box-shadow-small);
 }
 
 .navContainer {
-  width: 80%;
+  padding: var(--padding-3);
   margin: auto;
 }
 

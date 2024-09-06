@@ -28,7 +28,7 @@ const Home = () => {
       <header className={styles.homeHeader}>
         <div className={styles.headerText}>
           <h1>Story Ranker</h1>
-          <p className={`subheading`}>
+          <p className={styles.subheading}>
             Share your favourite blogs and sites from around the web. Vote on
             posts you love to help them climb the rankings!
           </p>
@@ -39,7 +39,7 @@ const Home = () => {
           )}
         </div>
         <div className={styles.headerImgContainer}>
-          <img src="storyRankerHerov2.webp" />
+          <img src="storyRankerHeroV4.webp" />
         </div>
       </header>
 

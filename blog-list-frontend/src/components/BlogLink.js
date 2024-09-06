@@ -62,7 +62,11 @@ const BlogLink = ({ blog }) => {
           </>
         )}
 
-        {!user && <p>(Log in to vote on posts!)</p>}
+        {!user && (
+          <p>
+            (<Link to="/login">Log in</Link> to vote on posts!)
+          </p>
+        )}
       </div>
       <div className={styles.userInfo}>
         <p>posted by {blog.user.username}</p>
