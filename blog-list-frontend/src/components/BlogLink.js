@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import styles from "./BlogLink.module.css";
+import styles from "../styles//BlogLink.module.css";
 import { useUser } from "../contexts/userContext";
 import blogService from "../services/blogs";
 import { useMutation, useQueryClient } from "react-query";

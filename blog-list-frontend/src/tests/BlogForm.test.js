@@ -1,7 +1,7 @@
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 import { render, fireEvent, act } from "@testing-library/react";
-import BlogForm from "./BlogForm";
+import BlogForm from "../components/BlogForm";
 
 test("form calls handleAdd with correct data when submitted", async () => {
   const handleAdd = jest.fn();

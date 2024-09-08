@@ -1,6 +1,6 @@
 import React from "react";
-import "./index.css";
-import "./variables.css";
+import "./styles/index.css";
+import "./styles/variables.css";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter as Router } from "react-router-dom";

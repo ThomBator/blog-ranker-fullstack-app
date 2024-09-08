@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./DesktopNav.module.css";
+import styles from "../styles/DesktopNav.module.css";
 import { Link } from "react-router-dom";
 import { useUser, useLogout } from "../contexts/userContext";
 

@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useQuery } from "react-query";
 import blogService from "../services/blogs";
 import { Link } from "react-router-dom";
-import styles from "./Home.module.css";
+import styles from "../styles/Home.module.css";
 import BlogForm from "./BlogForm";
 import BlogLink from "./BlogLink";
 import Toggleable from "./Toggleable";

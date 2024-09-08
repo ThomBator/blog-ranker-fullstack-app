@@ -1,6 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import PropTypes from "prop-types";
-import styles from "./Toggleable.module.css";
+import styles from "../styles/Toggleable.module.css";
 
 const Toggleable = forwardRef((props, refs) => {
   const [visible, setVisible] = useState(false);

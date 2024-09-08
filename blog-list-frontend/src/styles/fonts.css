@@ -1,0 +1,23 @@
+@font-face {
+  font-family: Poppins;
+  src: url(../../public/fonts/Poppins-Regular.woff2),
+    url(../../public/fonts/Poppins-Regular.woff);
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Poppins;
+  src: url(../../public/fonts/Poppins-SemiBold.woff2),
+    url(../../public/fonts/Poppins-SemiBold.woff);
+  font-style: normal;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: Poppins;
+  src: url(../../public/fonts/Poppins-Bold.woff2),
+    url(../../public/fonts/Poppins-Bold.woff);
+  font-style: normal;
+  font-weight: 700;
+}

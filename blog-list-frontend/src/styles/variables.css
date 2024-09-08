@@ -44,7 +44,8 @@
   --font-xl: 2.5rem;
   --font-xxl: 3rem;
   /*Font-weight variables*/
-  --font-regular: 500;
+  --font-regular: 400;
+  --font-semi-bold: 600;
   --font-bold: 700;
   /* Box shadow variables */
   --box-shadow-small: 0 2px 4px var(--medium-color, rgba(0, 0, 0, 0.1));

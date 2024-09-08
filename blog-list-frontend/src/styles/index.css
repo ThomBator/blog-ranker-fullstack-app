@@ -1,52 +1,56 @@
-@import url("variables.css");
 @import url("reset.css");
+@import url("variables.css");
+@import url("fonts.css");
 
 /*global font style*/
 body {
-  font-family: "Courier New", Courier, monospace, sans-serif;
+  font-family: "Poppins", sans-serif;
+  font-weight: var(--font-regular);
 }
 /*global font-sizes*/
 
 h1 {
+  color: var(--darkest-color);
   font-size: var(--font-xxl);
   font-weight: var(--font-bold);
   letter-spacing: 0.15rem;
+  margin-bottom: var(--margin-3);
 }
 
 h2 {
+  color: var(--dark-color);
   font-size: var(--font-xl);
-  font-weight: var(--font-bold);
+  font-weight: var(--font-semi-bold);
+  margin-bottom: var(--margin-3);
 }
 
 h3 {
+  color: var(--dark-color);
   font-size: var(--font-l);
-  font-weight: var(--font-bold);
+  font-weight: var(--font-semi-bold);
+  margin-bottom: var(--margin-3);
 }
 
 h4 {
+  color: var(--dark-color);
   font-size: var(--font-m);
-  font-weight: var(--font-bold);
+  font-weight: var(--font-semi-bold);
+  margin-bottom: var(--margin-3);
 }
 
 p {
+  color: var(--medium-color);
   font-size: var(--font-s);
   font-weight: var(--font-regular);
 }
 
 .small-font {
+  color: var(--dark-color);
   font-size: var(--font-xs);
   font-weight: var(--font-regular);
 }
 
 /*global font-colors*/
-
-h1,
-h2,
-h3,
-h4 {
-  margin-bottom: var(--margin-3);
-  color: var(--darkest-color);
-}
 
 p {
   color: var(--dark-color);
@@ -55,9 +59,6 @@ p {
 }
 
 button {
-  font-weight: var(--font-bold);
-
-  box-shadow: var(--box-shadow-small);
   transition: transform 0.3s ease-in-out;
 }
 
@@ -67,18 +68,20 @@ button:hover {
 
 .primaryButton {
   background-color: var(--primary-color);
-  color: var(--lightest-color);
   border-radius: 30rem;
   box-shadow: var(--box-shadow-small);
+  color: var(--lightest-color);
+  font-weight: var(--font-bold);
   padding: var(--padding-1);
 }
 
 .secondaryButton {
   background-color: var(--lightest-color);
-  color: var(--dark-color);
   border: 2px solid var(--medium-color);
   box-shadow: var(--box-shadow-small);
   border-radius: 30rem;
+  color: var(--dark-color);
+  font-weight: var(--font-semi-bold);
   padding-block: var(--padding-1);
   padding-inline: var(--padding-2);
 }

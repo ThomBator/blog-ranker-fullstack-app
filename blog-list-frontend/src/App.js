@@ -11,7 +11,7 @@ import Notification from "./components/Notifications";
 import User from "./components/User";
 import { Routes, Route } from "react-router-dom";
 import { useInitUser } from "./contexts/userContext";
-import styles from "./App.module.css";
+import styles from "./styles/App.module.css";
 
 const App = () => {
   const initUser = useInitUser();

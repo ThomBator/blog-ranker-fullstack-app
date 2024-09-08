@@ -3,7 +3,7 @@ import { useNotificationDispatch } from "../contexts/notificationContext";
 import { useMutation, useQueryClient } from "react-query";
 import blogService from "../services/blogs";
 import { useLogout, useUser } from "../contexts/userContext";
-import styles from "./BlogForm.module.css";
+import styles from "../styles/BlogForm.module.css";
 
 const BlogForm = () => {
   const [title, setTitle] = useState("");

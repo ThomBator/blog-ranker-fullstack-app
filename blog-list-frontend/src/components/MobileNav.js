@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./MobileNav.module.css";
+import styles from "../styles/MobileNav.module.css";
 import { Link } from "react-router-dom";
 import { useUser, useLogout } from "../contexts/userContext";
 import { push as Menu } from "react-burger-menu";
