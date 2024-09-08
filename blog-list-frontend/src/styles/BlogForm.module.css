@@ -1,6 +1,5 @@
 .buttonStyle {
-  font-size: 1.5rem;
-
-  margin-bottom: 0.5rem;
-  margin-top: 0.5rem;
+  font-size: var(--font-s);
+  margin-bottom: var(--margin-2);
+  margin-top: var(--margin-2);
 }

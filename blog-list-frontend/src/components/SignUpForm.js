@@ -4,7 +4,7 @@ import { useSignUp, useUser } from "../contexts/userContext";
 import { useField } from "../hooks/index";
 import { useNotificationDispatch } from "../contexts/notificationContext";
 import { Link } from "react-router-dom";
-import styles from "./LoginForm.module.css";
+import styles from "../styles/LoginForm.module.css";
 
 const SignUpForm = () => {
   //doSignUp takes a user object to pass to backend for authentication

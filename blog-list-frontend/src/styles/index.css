@@ -42,20 +42,13 @@ p {
   color: var(--medium-color);
   font-size: var(--font-s);
   font-weight: var(--font-regular);
+  margin-block: var(--margin-0);
 }
 
 .small-font {
   color: var(--dark-color);
   font-size: var(--font-xs);
   font-weight: var(--font-regular);
-}
-
-/*global font-colors*/
-
-p {
-  color: var(--dark-color);
-  line-height: 1.4rem;
-  margin-bottom: var(--margin-3);
 }
 
 button {
@@ -77,9 +70,9 @@ button:hover {
 
 .secondaryButton {
   background-color: var(--lightest-color);
+  border-radius: 30rem;
   border: 2px solid var(--medium-color);
   box-shadow: var(--box-shadow-small);
-  border-radius: 30rem;
   color: var(--dark-color);
   font-weight: var(--font-semi-bold);
   padding-block: var(--padding-1);

@@ -1,32 +1,32 @@
 .blogLinkContainer {
   background-color: var(--lightest-color);
-  padding-inline: 1rem;
-  padding-block: 0.5rem;
+  padding-block: var(--padding-2);
+  padding-inline: var(--padding-3);
 }
 
 .linkInfo,
 .voteInfo,
 .userInfo {
+  align-items: flex-start;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  gap: var(--gap-1);
 }
 
-.linkInfo {
-  margin-bottom: -0.5rem;
+.linkInfo > * {
+  margin-bottom: var(--margin-0);
 }
 
 .voteInfo > * {
-  padding-block: 0;
-  margin-block: 0;
+  margin-block: var(--margin-0);
+  padding-block: var(--padding-0);
 }
 
 .userInfo > * {
-  font-size: 0.75rem;
-  padding: 0;
-  margin-block: 0;
+  font-size: var(--font-size-xs);
+  margin-block: var(--margin-0);
+  padding: var(--padding-0);
 }
 
 .deleteButton {
-  padding-inline: 0.25rem;
+  padding-inline: var(--padding-1);
 }

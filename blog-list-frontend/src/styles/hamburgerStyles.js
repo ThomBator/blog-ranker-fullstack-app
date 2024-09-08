@@ -1,10 +1,10 @@
 const hamburgerStyles = {
   bmBurgerButton: {
-    position: "absolute",
-    width: "36px",
     height: "30px",
     left: "50%",
+    position: "absolute",
     top: "50%",
+    width: "36px",
   },
   bmBurgerBars: {
     background: "#FFFFFF",
@@ -20,20 +20,22 @@ const hamburgerStyles = {
     background: "#FFFFFF",
   },
   bmMenuWrap: {
-    position: "fixed",
     height: "100%",
+    marginLeft: "-25px",
+    position: "fixed",
   },
   bmMenu: {
-    background: "#373a47",
-    padding: "2.5em 1.5em 0",
+    background: "#00607a",
     fontSize: "1.15em",
+    padding: "2.5em 1.5em, 0",
   },
   bmMorphShape: {
     fill: "#373a47",
   },
   bmItemList: {
     color: "#b8b7ad",
-    padding: "0.8em",
+    paddingBlock: "3em",
+    paddingInline: "0.8em",
   },
   bmItem: {
     display: "inline-block",

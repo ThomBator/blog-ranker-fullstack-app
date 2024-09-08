@@ -1,13 +1,13 @@
 :root {
   /*Color variables*/
   /* Color variables */
-  --primary-color: #00607a; /* A contrasting blue color */
-  --darkest-color: #0d0d0d; /* Darker than black */
+  --background-color: #7bbbb8;
   --dark-color: #333333; /* A standard dark gray */
-  --medium-color: #666666; /* A medium gray */
+  --darkest-color: #0d0d0d; /* Darker than black */
   --light-color: #cccccc; /* A light gray */
   --lightest-color: #f2f2f2; /* Very light gray */
-  --background-color: #7bbbb8;
+  --medium-color: #666666; /* A medium gray */
+  --primary-color: #00607a; /* A contrasting blue color */
 
   /*Margin Variables*/
   --margin-0: 0rem;
@@ -24,7 +24,7 @@
 
   /*Padding Variables*/
 
-  -padding-0: 0rem;
+  --padding-0: 0rem;
   --padding-1: 0.25rem;
   --padding-2: 0.5rem;
   --padding-3: 1rem;
@@ -43,12 +43,27 @@
   --font-l: 2rem;
   --font-xl: 2.5rem;
   --font-xxl: 3rem;
+
   /*Font-weight variables*/
   --font-regular: 400;
   --font-semi-bold: 600;
   --font-bold: 700;
+
   /* Box shadow variables */
   --box-shadow-small: 0 2px 4px var(--medium-color, rgba(0, 0, 0, 0.1));
   --box-shadow-medium: 0 4px 8px var(--medium-color, rgba(0, 0, 0, 0.2));
   --box-shadow-large: 0 8px 16px var(--medium-color, rgba(0, 0, 0, 0.3));
+
+  /* Flexbox gap variables*/
+  --gap-0: 0rem;
+  --gap-1: 0.25rem;
+  --gap-2: 0.5rem;
+  --gap-3: 1rem;
+  --gap-4: 1.5rem;
+  --gap-5: 2rem;
+  --gap-6: 2.5rem;
+  --gap-7: 3rem;
+  --gap-8: 4rem;
+  --gap-9: 6rem;
+  --gap-10: 8rem;
 }

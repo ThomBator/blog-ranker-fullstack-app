@@ -16,46 +16,25 @@ const MobileNav = () => {
       <Menu styles={hamburgerStyles}>
         <div className={`${styles.mobileNavContainer}`}>
           <nav className={styles.navGroup}>
-            <Link
-              className={`${styles.navElement} ${styles.interactiveNavElement}`}
-              to="/"
-            >
+            <Link className={styles.navElement} to="/">
               Home
             </Link>
-            <Link
-              className={`${styles.navElement} ${styles.interactiveNavElement}`}
-              to="/users"
-            >
+            <Link className={styles.navElement} to="/users">
               Users
             </Link>
-          </nav>
-          {user && (
-            <nav>
-              <span className={styles.navElement}>
-                {user.username} is logged in{" "}
-              </span>
-              <button
-                className={`${styles.logoutButton} zero ttsecondaryButton`}
-                type="button"
-                onClick={logOut}
-              >
+            {user && (
+              <Link className={styles.navElement} onCick={logOut} to="/">
                 Logout
-              </button>
-            </nav>
-          )}
-
-          {!user && (
-            <nav>
-              <Link to="/login" className={styles.navElement}>
-                <button
-                  className={`${styles.logoutButton} secondaryButton`}
-                  type="button"
-                >
-                  Login to post, vote & comment
-                </button>
               </Link>
-            </nav>
-          )}
+            )}
+            {!user && (
+              <>
+                <Link to="/login" className={styles.navElement}>
+                  Login
+                </Link>
+              </>
+            )}
+          </nav>
         </div>
       </Menu>
     </div>

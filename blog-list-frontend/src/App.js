@@ -24,22 +24,18 @@ const App = () => {
 
   return (
     <div className={styles.appContainer}>
-      <div className={styles.mainContainer}>
-        <MobileNav />
-        <DesktopNav />
-        <Notification />
+      <MobileNav />
+      <DesktopNav />
+      <Notification />
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/blogs/:id" element={<Blog />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/users/:id" element={<User />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/signup" element={<SignUpForm />} />
-        </Routes>
-      </div>
-
-      <br />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/blogs/:id" element={<Blog />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/users/:id" element={<User />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/signup" element={<SignUpForm />} />
+      </Routes>
     </div>
   );
 };

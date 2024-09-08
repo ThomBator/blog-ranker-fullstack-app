@@ -1,7 +1,7 @@
 .buttonStyle {
   font-size: var(--font-m);
-  padding-block: var(--padding-2);
-  padding-inline: var(--padding-3);
 
   margin-bottom: 2rem;
+  padding-block: var(--padding-2);
+  padding-inline: var(--padding-3);
 }

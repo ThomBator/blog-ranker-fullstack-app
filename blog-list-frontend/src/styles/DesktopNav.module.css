@@ -6,9 +6,9 @@
 }
 @media screen and (min-width: 1200px) {
   .navContainer {
+    align-items: center;
     display: flex;
     justify-content: space-between;
-    align-items: center;
   }
 
   .navElement:last-child {
@@ -22,27 +22,26 @@
 }
 
 .navContainer {
-  padding: var(--padding-3);
   margin: auto;
+  padding: var(--padding-3);
 }
 
 .navElement {
-  margin-right: var(--margin-4);
-
-  font-size: var(--font-s);
-  text-decoration: none;
   color: var(--lightest-color);
+  font-size: var(--font-s);
   font-weight: var(--font-bold);
+  margin-right: var(--margin-4);
+  text-decoration: none;
 }
 
 .interactiveNavElement:hover {
-  text-decoration: underline;
   color: var(--light-color);
+  text-decoration: underline;
 }
 
 .logoutButton {
-  font-size: var(--font-xs);
 
+  font-size: var(--font-xs);
   padding-block: var(--padding-1);
   padding-inline: var(--padding-3);
 }

@@ -11,30 +11,34 @@
 }
 
 .mobileNavBackground {
-  position: relative;
-  padding: 1rem;
-  min-height: 5rem;
   background-color: var(--primary-color);
   box-shadow: var(--box-shadow-small);
+  min-height: 5rem;
+  padding: 1rem;
+  position: relative;
 }
 
 .navContainer {
-  width: 80%;
   margin: auto;
+  width: 80%;
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
 }
 
 .navElement {
-  margin-right: var(--margin-4);
-
-  font-size: var(--font-s);
-  text-decoration: none;
   color: var(--lightest-color);
+  font-size: var(--font-s);
   font-weight: var(--font-bold);
+  margin-right: var(--margin-4);
+  text-decoration: none;
 }
 
-.interactiveNavElement:hover {
-  text-decoration: underline;
+.navElement:hover {
   color: var(--light-color);
+  text-decoration: underline;
 }
 
 .logoutButton {
