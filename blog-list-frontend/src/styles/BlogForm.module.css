@@ -1,5 +1,42 @@
+.blogFormContainer {
+  background: var(--primary-color);
+  box-shadow: var(--box-shadow-small);
+  display: flex;
+  justify-content: center;
+  padding: var(--padding-5);
+}
+
+.blogForm {
+  background: #fff;
+  padding: var(--padding-5);
+  box-shadow: var(--box-shadow-small);
+  width: 50%;
+}
+
 .buttonStyle {
-  font-size: var(--font-s);
+  color: var(--lightest-color);
+  background: var(--primary-color);
+  font-size: var(--font-xs);
+  font-weight: var(--font-semi-bold);
   margin-bottom: var(--margin-2);
-  margin-top: var(--margin-2);
+}
+
+.formElement {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--margin-2);
+}
+
+.formElement > input {
+  width: 10rem;
+}
+
+.formElement > label {
+  font-size: var(--font-xs);
+  color: var(--medium-color);
+}
+
+.formRow {
+  display: flex;
+  gap: var(--gap-3);
 }

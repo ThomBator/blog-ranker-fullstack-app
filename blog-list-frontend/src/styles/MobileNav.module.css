@@ -11,7 +11,7 @@
 }
 
 .mobileNavBackground {
-  background-color: var(--primary-color);
+  background: var(--primary-color);
   box-shadow: var(--box-shadow-small);
   min-height: 5rem;
   padding: 1rem;

@@ -1,7 +1,19 @@
-.buttonStyle {
-  font-size: var(--font-m);
+.cancelButtonStyle {
+  font-size: var(--font-xs);
+  font-weight: var(--font-semi-bold);
+  background: #fff;
+  border: none;
+  text-decoration: underline;
+  margin-bottom: var(--margin-5);
+}
 
+.shareButtonStyle {
+  font-size: var(--font-m);
   margin-bottom: 2rem;
   padding-block: var(--padding-2);
   padding-inline: var(--padding-3);
+}
+
+.toggleableContainer {
+  margin-bottom: var(--margin-5);
 }

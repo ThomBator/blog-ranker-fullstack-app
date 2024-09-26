@@ -5,6 +5,7 @@ const hamburgerStyles = {
     position: "absolute",
     top: "50%",
     width: "36px",
+    transform: "translate(-50%, -50%)",
   },
   bmBurgerBars: {
     background: "#FFFFFF",

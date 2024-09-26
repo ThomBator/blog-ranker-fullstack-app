@@ -7,7 +7,11 @@
   --light-color: #cccccc; /* A light gray */
   --lightest-color: #f2f2f2; /* Very light gray */
   --medium-color: #666666; /* A medium gray */
-  --primary-color: #00607a; /* A contrasting blue color */
+  --primary-color: linear-gradient(
+    135deg,
+    #00607a 0%,
+    #0088a0 100%
+  ); /* A contrasting blue color */
 
   /*Margin Variables*/
   --margin-0: 0rem;

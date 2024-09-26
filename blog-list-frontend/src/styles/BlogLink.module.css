@@ -1,5 +1,5 @@
 .blogLinkContainer {
-  background-color: var(--lightest-color);
+  background: var(--lightest-color);
   padding-block: var(--padding-2);
   padding-inline: var(--padding-3);
 }

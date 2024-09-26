@@ -37,44 +37,50 @@ const BlogForm = () => {
     newBlogMutation.mutate([{ title, author, url }, token]);
   };
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">title:</label>
-          <input
-            id="title"
-            name="title"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
+    <div className={styles.blogFormContainer}>
+      <form className={styles.blogForm} onSubmit={handleSubmit}>
+        <div className={styles.formRow}>
+          <div className={styles.formElement}>
+            <label htmlFor="title">Title:</label>
+            <input
+              id="title"
+              name="title"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+            />
+          </div>
+          <div className={styles.formElement}>
+            <label htmlFor="author">Author:</label>
+            <input
+              id="author"
+              name="author"
+              value={author}
+              onChange={(event) => setAuthor(event.target.value)}
+            />
+          </div>
+        </div>
+        <div className={styles.formRow}>
+          <div className={styles.formElement}>
+            <label htmlFor="url">URL:</label>
+            <input
+              id="url"
+              name="url"
+              value={url}
+              type="url"
+              onChange={(event) => setUrl(event.target.value)}
+            />
+          </div>
         </div>
         <div>
-          <label htmlFor="author">author:</label>
-          <input
-            id="author"
-            name="author"
-            value={author}
-            onChange={(event) => setAuthor(event.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="url">url:</label>
-          <input
-            id="url"
-            name="url"
-            value={url}
-            type="url"
-            onChange={(event) => setUrl(event.target.value)}
-          />
-        </div>
-        <div>
-          <button
-            className={`${styles.buttonStyle} primaryButton`}
-            id="blogSubmit"
-            type="submit"
-          >
-            add
-          </button>
+          <div>
+            <button
+              className={`${styles.buttonStyle} `}
+              id="blogSubmit"
+              type="submit"
+            >
+              Add
+            </button>
+          </div>
         </div>
       </form>
     </div>

@@ -17,13 +17,14 @@
 }
 
 .desktopNavBackground {
-  background-color: var(--primary-color);
+  background: var(--primary-color);
   box-shadow: var(--box-shadow-small);
 }
 
 .navContainer {
   margin: auto;
   padding: var(--padding-3);
+  width: 80%;
 }
 
 .navElement {
@@ -39,8 +40,7 @@
   text-decoration: underline;
 }
 
-.logoutButton {
-
+.loginLogoutButton {
   font-size: var(--font-xs);
   padding-block: var(--padding-1);
   padding-inline: var(--padding-3);

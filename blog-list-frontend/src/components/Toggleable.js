@@ -19,10 +19,10 @@ const Toggleable = forwardRef((props, refs) => {
   });
 
   return (
-    <div>
+    <div className={styles.toggleableContainer}>
       <div style={hideWhenVisible}>
         <button
-          className={`${styles.buttonStyle} primaryButton`}
+          className={`${styles.shareButtonStyle} primaryButton`}
           onClick={toggleVisibility}
         >
           {props.buttonLabel}
@@ -31,10 +31,10 @@ const Toggleable = forwardRef((props, refs) => {
       <div style={showWhenVisible}>
         {props.children}
         <button
-          className={`${styles.buttonStyle} secondaryButton`}
+          className={`${styles.cancelButtonStyle}`}
           onClick={toggleVisibility}
         >
-          cancel
+          close
         </button>
       </div>
     </div>

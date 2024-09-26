@@ -60,7 +60,7 @@ button:hover {
 }
 
 .primaryButton {
-  background-color: var(--primary-color);
+  background: var(--primary-color);
   border-radius: 30rem;
   box-shadow: var(--box-shadow-small);
   color: var(--lightest-color);
@@ -69,7 +69,7 @@ button:hover {
 }
 
 .secondaryButton {
-  background-color: var(--lightest-color);
+  background: var(--lightest-color);
   border-radius: 30rem;
   border: 2px solid var(--medium-color);
   box-shadow: var(--box-shadow-small);

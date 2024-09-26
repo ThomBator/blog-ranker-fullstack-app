@@ -33,7 +33,7 @@ const DesktopNav = () => {
               {user.username} is logged in{" "}
             </span>
             <button
-              className={`${styles.logoutButton} zero ttsecondaryButton`}
+              className={`${styles.loginLogoutButton} secondaryButton`}
               type="button"
               onClick={logOut}
             >
@@ -46,7 +46,7 @@ const DesktopNav = () => {
           <nav>
             <Link to="/login" className={styles.navElement}>
               <button
-                className={`${styles.logoutButton} secondaryButton`}
+                className={`${styles.loginLogoutButton} secondaryButton`}
                 type="button"
               >
                 Login to post, vote & comment
