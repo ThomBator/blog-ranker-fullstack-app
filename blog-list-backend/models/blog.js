@@ -16,7 +16,7 @@ const blogSchema = new mongoose.Schema(
             ref: "User",
             index: true,
           },
-          vote: { type: Number, required: true, enum: [-1, 1] },
+          vote: { type: Number, required: true, enum: [-1, 0, 1] },
         },
       ],
     },

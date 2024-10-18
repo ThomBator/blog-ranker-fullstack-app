@@ -1,64 +1,40 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import styles from "../styles//BlogLink.module.css";
+import styles from "../styles/BlogLink.module.css";
 import { useUser } from "../contexts/userContext";
 import blogService from "../services/blogs";
 import { useMutation, useQueryClient } from "react-query";
 import { useNotificationDispatch } from "../contexts/notificationContext";
-import { useVotes } from "../hooks/index";
 
 const BlogLink = ({ blog }) => {
+  console.log("Blog in BlogLink: ", blog);
   const user = useUser();
-  const remove = blogService.remove;
-  const update = blogService.update;
-  const notifyWith = useNotificationDispatch();
-  const { totalVotesValue, userVote, handleVote } = useVotes(blog);
-
-  let shortURL = "";
-
-  try {
-    const fullURL = new URL(blog.url);
-    shortURL = fullURL.hostname.replace(/^www\./, "");
-  } catch {
-    shortURL = blog.url;
-  }
-  //actually invaludates the the cache data so it can be refreshed from server
   const queryClient = useQueryClient();
+  const notifyWith = useNotificationDispatch();
 
-  //This is the hook that will allow for the cache to be invalidated, but only if the REST API call is succesful
-  const removeBlogMutation = useMutation(([id]) => remove(id), {
+  const shortURL = (() => {
+    try {
+      const fullURL = new URL(blog.url);
+      return fullURL.hostname.replace(/^www\./, "");
+    } catch {
+      return blog.url;
+    }
+  })();
+
+  const removeBlogMutation = useMutation((id) => blogService.remove(id), {
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["blogs"] });
-      notifyWith("Blog post successfully deleted");
+      queryClient.invalidateQueries(["blogs"]);
+      notifyWith("Blog successfully deleted");
     },
     onError: (error) => {
-      notifyWith("Blog deletion error. Contact site administrator");
-      console.log("Blog Deletion Error: ", error);
+      notifyWith("Error deleting blog");
+      console.error("Blog Deletion Error:", error);
     },
   });
 
-  const updateBlogMutation = useMutation(
-    ([id, updatedBlog]) => update(id, updatedBlog),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["blogs"] });
-        notifyWith("Blog post successfully updated");
-      },
-      onError: (error) => {
-        notifyWith("Blog deletion error. Contact site administrator");
-        console.log("Blog Deletion Error: ", error);
-      },
-    }
-  );
-
-  const updateVote = (voteValue) => {
-    const updatedBlog = handleVote(voteValue);
-    updateBlogMutation.mutate(updatedBlog.id, updatedBlog);
-  };
-
   const handleDelete = () => {
-    removeBlogMutation.mutate([blog.id]);
+    removeBlogMutation.mutate(blog.id);
   };
 
   return (
@@ -68,35 +44,11 @@ const BlogLink = ({ blog }) => {
         <p>({shortURL})</p>
       </div>
 
-      <div className={styles.voteInfo}>
-        {/*remember that blog.votes is an object that contains user metadata so we can limit the number of votes an individual user can make. So the actual votes value is at blog.votes.totalVotes*/}
-
-        {<p>Votes: {totalVotesValue}</p>}
-        {user && (
-          <>
-            <button onClick={() => updateVote(1)} disabled={userVote === 1}>
-              Upvote
-            </button>
-            <button onClick={() => updateVote(-1)} disabled={userVote === -1}>
-              Downvote
-            </button>
-          </>
-        )}
-
-        {!user && (
-          <p>
-            (<Link to="/login">Log in</Link> to vote on posts!)
-          </p>
-        )}
-      </div>
       <div className={styles.userInfo}>
-        <p>posted by {blog.user.username}</p>
-        {user && user.id === blog.user.id && (
-          <button
-            className={styles.deleteButton}
-            onClick={() => handleDelete()}
-          >
-            delete
+        <p>Posted by {blog.user?.username}</p>
+        {user && user.id === blog.user?.id && (
+          <button className={styles.deleteButton} onClick={handleDelete}>
+            Delete
           </button>
         )}
       </div>
@@ -106,15 +58,21 @@ const BlogLink = ({ blog }) => {
 
 BlogLink.propTypes = {
   blog: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
     votes: PropTypes.shape({
-      users: PropTypes.array.isRequired,
-    }),
-    comments: PropTypes.array.isRequired,
-    user: PropTypes.object.isRequired,
-    id: PropTypes.string.isRequired,
+      users: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string.isRequired,
+          vote: PropTypes.number.isRequired,
+        })
+      ).isRequired,
+    }).isRequired,
+    user: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      username: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
 };
 

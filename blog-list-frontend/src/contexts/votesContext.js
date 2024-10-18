@@ -13,24 +13,35 @@ const UPDATE = "UPDATE";
 const votesReducer = (state, action) => {
   switch (action.type) {
     case SET: {
+      const { blogId, votes } = action.payload;
+
+      // Ensure votes are an array and totalVotes is calculated safely
+      const validVotes = Array.isArray(votes) ? votes : [];
+      const totalVotes = validVotes.reduce(
+        (total, vote) => total + vote.vote,
+        0
+      );
+
       return {
         ...state,
         votes: {
           ...state.votes,
-          [action.payload.blogId]: action.payload.votes,
+          [blogId]: validVotes,
         },
         totalVotes: {
           ...state.totalVotes,
-          [action.payload.blogId]: action.payload.totalVotes,
+          [blogId]: totalVotes,
         },
       };
     }
+
     case UPDATE: {
       const { blogId, newVote } = action.payload;
+      const existingVotes = state.votes[blogId] || [];
 
-      const updatedVotes = state.votes[blogId].map((userVote) =>
-        userVote.id === newVote.id ? newVote : userVote
-      );
+      const updatedVotes = existingVotes.some((vote) => vote.id === newVote.id)
+        ? existingVotes.map((vote) => (vote.id === newVote.id ? newVote : vote))
+        : [...existingVotes, newVote];
 
       const newTotalVotes = updatedVotes.reduce(
         (total, vote) => total + vote.vote,
@@ -49,9 +60,9 @@ const votesReducer = (state, action) => {
         },
       };
     }
-    default: {
+
+    default:
       return state;
-    }
   }
 };
 
@@ -60,26 +71,22 @@ const VotesContext = createContext();
 export const VotesContextProvider = ({ children }) => {
   const [votesObj, dispatch] = useReducer(votesReducer, initialState);
 
-  // Set initial votes state when a blog is retrieved from database
   const setVotes = (blogId, votes) => {
-    const totalVotes = votes.reduce((total, vote) => total + vote.vote, 0);
-    dispatch({ type: SET, payload: { blogId, votes, totalVotes } });
+    dispatch({ type: SET, payload: { blogId, votes } });
   };
 
-  // Update votes when user votes
   const updateVote = (blogId, newVote) => {
     dispatch({ type: UPDATE, payload: { blogId, newVote } });
   };
 
   const useVotesValues = (blogId) => {
-    const totalVotes = votesObj.totalVotes[blogId] || 0; // Default to 0 if undefined
-    const userVote = votesObj.votes[blogId] || []; // Default to empty array if undefined
-
-    return [totalVotes, userVote];
+    const totalVotes = votesObj.totalVotes[blogId] || 0;
+    const userVotes = votesObj.votes[blogId] || [];
+    return [totalVotes, userVotes];
   };
 
   return (
-    <VotesContext.Provider value={[setVotes, updateVote, useVotesValues]}>
+    <VotesContext.Provider value={{ setVotes, updateVote, useVotesValues }}>
       {children}
     </VotesContext.Provider>
   );
@@ -89,4 +96,10 @@ VotesContextProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export const useVotes = () => useContext(VotesContext);
+export const useVotes = () => {
+  const context = useContext(VotesContext);
+  if (!context) {
+    throw new Error("useVotes must be used within a VotesContextProvider");
+  }
+  return context;
+};
