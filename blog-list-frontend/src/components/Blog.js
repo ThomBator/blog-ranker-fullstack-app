@@ -2,25 +2,30 @@ import blogService from "../services/blogs";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-// import { useUser } from "../contexts/userContext";
+import { useUser } from "../contexts/userContext";
+//import { useNotificationDispatch } from "../contexts/notificationContext";
+import { useVotes } from "../hooks";
+
+import { Link } from "react-router-dom";
 
 const Blog = () => {
   const id = useParams().id;
-  console.log("Id ", id);
-  const {
-    data: blog,
-    isLoading,
-    isError,
-  } = useQuery(["blogs", id], () => blogService.getOne(id));
-  const [votes, setVotes] = useState(blog ? blog.votes : 0);
-  //new comment being added to blog
-  const [comment, setComment] = useState("");
-  //existing comments already appended to blog
-  const comments = blog?.comments || null;
-  // const user = useUser();
-  const update = blogService.update;
-  const addComment = blogService.addComment;
+  const user = useUser();
+  const result = useQuery(["blogs", id], () => blogService.getOne(id));
   const queryClient = useQueryClient();
+  const [comment, setComment] = useState("");
+
+  //const remove = blogService.remove;
+  //const update = blogService.update;
+  //const notifyWith = useNotificationDispatch();
+  // was getting an infinite loop when useVotes was called before blog was available
+
+  //new comment being added to blog
+
+  //existing comments already appended to blog
+
+  //const update = blogService.update;
+  const addComment = blogService.addComment;
 
   const blogStyle = {
     paddingTop: 10,
@@ -30,21 +35,24 @@ const Blog = () => {
     marginBottom: 5,
   };
 
+  // const updateBlogMutation = useMutation(
+  //   ([id, updatedBlog]) => update(id, updatedBlog),
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries({ queryKey: ["blogs"] });
+  //       notifyWith("Blog post successfully updated");
+  //     },
+  //     onError: (error) => {
+  //       notifyWith("Error updating blog:", error);
+  //     },
+  //   }
+  // );
+
   // const removeBlogMutation = useMutation((id) => blogService.remove(id), {
   //   onSuccess: () => {
   //     queryClient.invalidateQueries({ queryKey: ["blogs"] });
   //   },
   // });
-
-  const updateBlogMutation = useMutation(([id, blog]) => update(id, blog), {
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["blogs"] });
-      setVotes(votes + 1);
-    },
-    onError: (error) => {
-      console.log("error: ", error);
-    },
-  });
 
   const addCommentMutation = useMutation(
     ([id, comment, user]) => addComment(id, comment, user),
@@ -64,28 +72,23 @@ const Blog = () => {
   //   }
   // };
 
-  const handleUpVote = () => {
-    updateBlogMutation.mutate([blog.id, { ...blog, votes: votes + 1 }]);
-  };
-
-  const handleDownVote = () => {
-    updateBlogMutation.mutate([
-      blog.id,
-      { ...blog, votes: votes > 0 ? votes - 1 : 0 },
-    ]);
-  };
-
   const handleAddComment = () => {
-    addCommentMutation.mutate([blog.id, comment]);
+    console.log("user in blog component handleAddComment: ", user);
+    addCommentMutation.mutate([blog.id, comment, user]);
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (result.isLoading) {
+    console.log(result);
+    return <div>loading.data</div>;
   }
 
-  if (isError || !blog) {
-    return <div>Error loading blog, or blog not found</div>;
-  }
+  const blog = result.data;
+
+  console.log(blog);
+
+  const totalVotes = 11;
+
+  const comments = blog?.comments || null;
 
   return (
     <div style={blogStyle}>
@@ -95,19 +98,26 @@ const Blog = () => {
 
       <p>URL: {blog.url} </p>
 
-      <div>
-        {" "}
-        <p>
-          votes: {votes}{" "}
-          {/* this needs to be refactored for upvotes and downvotes*/}
-          <button type="button" onClick={handleUpVote}>
-            upvote
-          </button>{" "}
-          <button type="button" onClick={handleDownVote}>
-            downvote
-          </button>{" "}
-        </p>
-      </div>
+      {
+        <div>
+          {<p>Votes: {totalVotes}</p>}
+          {/*user && (
+            <>
+              <button onClick={() => updateVote(1)} disabled={userVote === 1}>
+                Upvote
+              </button>
+              <button onClick={() => updateVote(-1)} disabled={userVote === -1}>
+                Downvote
+              </button>
+            </>
+          )*/}
+          {!user && (
+            <p>
+              (<Link to="/login">Log in</Link> to vote on posts!)
+            </p>
+          )}
+        </div>
+      }
 
       {/* {user.id === blog.user.id && (
         <div>
@@ -117,27 +127,34 @@ const Blog = () => {
         </div>
       )} */}
 
-      <br />
+      {!user && <p>Login to post a comment!</p>}
 
-      <form onSubmit={handleAddComment}>
-        <label>Add a comment</label>
-        <input value={comment} onChange={(e) => setComment(e.target.value)} />
-        <button type="submit">Add Comment</button>
-      </form>
-      <h3>Comments</h3>
-
-      {!comments ||
-        (comments.length === 0 && <p>No comments yet. Please add one!</p>)}
-      <ul>
-        {comments.length > 0 &&
-          comments.map((comment) => (
-            <li key={comment._id}>{comment.comment}</li>
-          ))}
-      </ul>
+      {user && (
+        <>
+          {" "}
+          <form onSubmit={handleAddComment}>
+            <label>Add a comment</label>
+            <input
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <button type="submit">Add Comment</button>
+          </form>
+          <h3>Comments</h3>
+          {(!comments || comments.length === 0) && (
+            <p>No comments yet. Please add one!</p>
+          )}
+          <ul>
+            {comments &&
+              comments.length > 0 &&
+              comments.map((comment) => (
+                <li key={comment._id}>{comment.comment}</li>
+              ))}
+          </ul>
+        </>
+      )}
     </div>
   );
 };
-
-//Remember the propTypes property is lowercase, but the PropTypes object used inside is uppdercase.
 
 export default Blog;

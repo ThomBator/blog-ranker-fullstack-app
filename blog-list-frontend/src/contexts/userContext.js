@@ -23,20 +23,15 @@ const UserContext = createContext();
 //create ContextProvider
 //Context Providers wrap parts of your component tree and make the state from that context available in that portion of the component tree.
 //In this app we are wrapping the entire tree in index.js, but there may be cases where the context only includes part of the tree
-export const UserContextProvider = (props) => {
+export const UserContextProvider = ({ children }) => {
   const [user, userDispatch] = useReducer(loginReducer, null);
 
   return (
     <UserContext.Provider value={[user, userDispatch]}>
       {/*The UserContex component created above is used here to wrap all child components in the context*/}
-      {props.children}
+      {children}
     </UserContext.Provider>
   );
-};
-
-//Ensuring type saftey for our UserContextProvider component
-UserContextProvider.propTypes = {
-  children: PropTypes.node.isRequired,
 };
 
 //allows a component to use a user if that state is held in the UserContext
@@ -116,6 +111,10 @@ export const useInitUser = () => {
       }
     }
   };
+};
+
+UserContextProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default UserContext;

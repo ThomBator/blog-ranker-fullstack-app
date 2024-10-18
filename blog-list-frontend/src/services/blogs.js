@@ -3,13 +3,26 @@ const baseUrl = "/api/blog";
 import storageService from "./storage";
 
 const getAll = async () => {
-  const request = axios.get(baseUrl);
-  return request.then((response) => response.data);
+  const response = await axios.get(baseUrl);
+  const blogs = response.data;
+
+  blogs.forEach((blog) => {
+    if (!blog.comments) {
+      blog.comments = [];
+    }
+  });
+
+  return blogs;
 };
 
 const getOne = async (id) => {
   const response = await axios.get(`${baseUrl}/${id}`);
-  return response.data;
+
+  const blog = response.data;
+  if (!blog.comments) {
+    blog.comments = [];
+  }
+  return blog;
 };
 
 const addComment = async (id, comment, user) => {

@@ -2,7 +2,7 @@ import React from "react";
 import { createContext, useReducer, useContext } from "react";
 import PropTypes from "prop-types";
 /*
-Actions needed
+Additional actions you might consider adding: 
   CREATED
   INVALID_CREDENTIALS
   LOGIN_SUCCESS
@@ -27,7 +27,7 @@ const NotificationContext = createContext();
 //This is the component that can wrap the app to manage state
 //It is basically ust a more clean way to deliver the provider component provided by createContext
 
-export const NotificationContextProvider = (props) => {
+export const NotificationContextProvider = ({ children }) => {
   const [notification, notificationDispatch] = useReducer(
     notificationReducer,
     null
@@ -35,25 +35,20 @@ export const NotificationContextProvider = (props) => {
 
   return (
     <NotificationContext.Provider value={[notification, notificationDispatch]}>
-      {props.children}
+      {children}
     </NotificationContext.Provider>
   );
 };
 
-//
-NotificationContextProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
 //Can be used to display current state in other components
 export const useNotificationValue = () => {
-  const notificationAndDisptach = useContext(NotificationContext);
+  const [notification] = useContext(NotificationContext);
   if (!NotificationContext) {
     throw new Error(
       "useNotificationValue must be used within a NotificationContextProvider"
     );
   }
-  return notificationAndDisptach[0];
+  return notification;
 };
 
 //Can be used to modify current state from other components.
@@ -73,6 +68,10 @@ export const useNotificationDispatch = () => {
       dispatch({ type: "CLEAR" });
     }, 5000);
   };
+};
+
+NotificationContextProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default NotificationContext;

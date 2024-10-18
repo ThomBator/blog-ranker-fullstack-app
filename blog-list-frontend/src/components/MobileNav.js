@@ -23,7 +23,7 @@ const MobileNav = () => {
               Users
             </Link>
             {user && (
-              <Link className={styles.navElement} onCick={logOut} to="/">
+              <Link className={styles.navElement} onClick={logOut} to="/">
                 Logout
               </Link>
             )}

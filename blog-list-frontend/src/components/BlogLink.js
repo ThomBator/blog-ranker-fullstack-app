@@ -11,6 +11,7 @@ import { useVotes } from "../hooks/index";
 const BlogLink = ({ blog }) => {
   const user = useUser();
   const remove = blogService.remove;
+  const update = blogService.update;
   const notifyWith = useNotificationDispatch();
   const { totalVotesValue, userVote, handleVote } = useVotes(blog);
 
@@ -37,6 +38,25 @@ const BlogLink = ({ blog }) => {
     },
   });
 
+  const updateBlogMutation = useMutation(
+    ([id, updatedBlog]) => update(id, updatedBlog),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["blogs"] });
+        notifyWith("Blog post successfully updated");
+      },
+      onError: (error) => {
+        notifyWith("Blog deletion error. Contact site administrator");
+        console.log("Blog Deletion Error: ", error);
+      },
+    }
+  );
+
+  const updateVote = (voteValue) => {
+    const updatedBlog = handleVote(voteValue);
+    updateBlogMutation.mutate(updatedBlog.id, updatedBlog);
+  };
+
   const handleDelete = () => {
     removeBlogMutation.mutate([blog.id]);
   };
@@ -50,13 +70,14 @@ const BlogLink = ({ blog }) => {
 
       <div className={styles.voteInfo}>
         {/*remember that blog.votes is an object that contains user metadata so we can limit the number of votes an individual user can make. So the actual votes value is at blog.votes.totalVotes*/}
-        <p>Votes: {totalVotesValue}</p>
+
+        {<p>Votes: {totalVotesValue}</p>}
         {user && (
           <>
-            <button onClick={() => handleVote(1)} disabled={userVote === 1}>
+            <button onClick={() => updateVote(1)} disabled={userVote === 1}>
               Upvote
             </button>
-            <button onClick={() => handleVote(-1)} disabled={userVote === -1}>
+            <button onClick={() => updateVote(-1)} disabled={userVote === -1}>
               Downvote
             </button>
           </>

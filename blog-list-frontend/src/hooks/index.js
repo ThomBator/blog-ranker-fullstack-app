@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import blogService from "../services/blogs";
-import { useNotificationDispatch } from "../contexts/notificationContext";
+
 import { useUser } from "../contexts/userContext";
-import { useMutation, useQueryClient } from "react-query";
 
 const useField = (type) => {
   const [value, setValue] = useState("");
@@ -14,29 +12,14 @@ const useField = (type) => {
   return { type, value, onChange };
 };
 
-const useVotes = (blog) => {
-  //The total votes for this blog and the user's current vote will be recalcualted in this hook
+const useVotes = (votes = { users: [] }) => {
   const [totalVotesValue, setTotalVotesValue] = useState(0);
   const [userVote, setUserVote] = useState(0);
-  const notifyWith = useNotificationDispatch();
-  const queryClient = useQueryClient();
   const currentUser = useUser();
 
-  const updateVoteMutation = useMutation(
-    (updatedBlog) => blogService.update(updatedBlog.id, updatedBlog),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["blogs"] });
-      },
-      onError: () => {
-        notifyWith("Updating blog votes failed");
-      },
-    }
-  );
+  const allUsers = votes.users || [];
 
-  //useEffect will make sure that certain aggregate recalcuations only happen when the blog or current user have changed
   useEffect(() => {
-    const allUsers = blog.votes.users;
     let initialTotalVotes = 0;
 
     if (allUsers.length > 0) {
@@ -49,56 +32,46 @@ const useVotes = (blog) => {
 
         if (userVoteObj) {
           setUserVote(userVoteObj.vote);
+        } else {
+          setUserVote(0); // Reset if user vote not found
         }
       }
-
       setTotalVotesValue(initialTotalVotes);
     }
-  }, [blog, currentUser]);
+  }, [allUsers, currentUser]);
 
   const handleVote = (newVote) => {
-    const allUsers = blog.votes.users;
-    const updateUsers = (type) => {
-      if (currentUser) {
-        if (type === "new") {
-          allUsers.push({ id: currentUser.id, vote: newVote });
-          blog.votes.users = allUsers;
-        } else if (type === "existing") {
-          const newAllUsers = allUsers.map((user) => {
-            if (user.id.toString() === currentUser.id.toString()) {
-              user.vote = newVote;
-            }
-            return user;
-          });
+    const newAllUsers = [...allUsers]; // Spread to avoid mutation
 
-          blog.votes.users = newAllUsers;
-        }
+    if (currentUser) {
+      const existingUserIndex = newAllUsers.findIndex(
+        (user) => user.id.toString() === currentUser.id.toString()
+      );
 
-        updateVoteMutation.mutate(blog);
+      if (existingUserIndex !== -1) {
+        // Existing user found
+        newAllUsers[existingUserIndex] = {
+          ...newAllUsers[existingUserIndex],
+          vote: newVote,
+        };
+      } else {
+        // New user vote
+        newAllUsers.push({ id: currentUser.id, vote: newVote });
       }
-    };
-
-    //user has already upvoted in the past
-    if (userVote === 1 && newVote === -1) {
-      setUserVote(-1);
-      //vote is decremented by 2 because we need to take away the upvote that was made previously(-1), then downvote (-1).
-      setTotalVotesValue(totalVotesValue - 2);
-      updateUsers("existing");
-      //user has already downvoted in the past, so they are allowed to upvote
-    } else if (userVote === -1 && newVote === 1) {
-      setUserVote(1);
-      //vote is incremented by 2 becuase we need to erase the downvote that was made previously (+1) and then upvote (+1)
-      setTotalVotesValue(totalVotesValue + 2);
-      updateUsers("existing");
     }
 
-    // user has never voted
-    else if (userVote === 0) {
-      setUserVote(newVote);
-      //this will handle either an upvote or downvote depending on the value passed in
-      setTotalVotesValue(totalVotesValue + newVote);
-      updateUsers("new");
-    }
+    // Calculate new total votes and update the vote of the current user
+    const newTotalVotes = newAllUsers.reduce(
+      (total, user) => total + user.vote,
+      0
+    );
+
+    // Optimistically update state
+    setUserVote(newVote);
+    setTotalVotesValue(newTotalVotes);
+
+    // Create updated blog object with new votes
+    return { users: newAllUsers };
   };
 
   return { totalVotesValue, userVote, handleVote };

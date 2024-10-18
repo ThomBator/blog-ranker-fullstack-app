@@ -1,5 +1,6 @@
 const blogRouter = require("express").Router();
 const Blog = require("../models/blog");
+const Comment = require("../models/comments");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 
@@ -22,7 +23,9 @@ blogRouter.get("/", async (request, response) => {
 });
 //get specific blog
 blogRouter.get("/:id", async (request, response) => {
-  const blog = await Blog.findById(request.params.id).populate("user");
+  const blog = await Blog.findById(request.params.id)
+    .populate("user")
+    .populate("comments");
 
   response.json(blog);
 });
@@ -67,17 +70,49 @@ blogRouter.post("/", async (request, response) => {
 //post comment on blog
 
 blogRouter.post("/:id/comments", async (request, response) => {
-  const comment = request.body;
+  const { comment, user } = request.body;
 
-  const blog = await Blog.findById(request.params.id);
+  console.log("Request body:", request.body);
 
-  console.log(blog);
+  console.log("User: ", user);
 
-  blog.comments = blog.comments.concat(comment);
+  try {
+    const blog = await Blog.findById(request.params.id);
 
-  await blog.save();
+    if (!blog) {
+      return response.status(404).json({ error: "Blog not found" });
+    }
 
-  response.json(blog);
+    if (!blog.comments) {
+      blog.comments = [];
+    }
+
+    // Create a new comment
+    const newComment = new Comment({
+      comment: comment,
+      user: user.id,
+      blog: blog.id,
+    });
+
+    // Save the comment to the Comment collection
+    const savedComment = await newComment.save();
+
+    // Add the comment's ID to the blog's comments array
+    blog.comments = blog.comments.concat(savedComment._id);
+
+    // Save the updated blog document
+    await blog.save();
+
+    // Populate the comment with user details and send the response
+    const populatedComment = await savedComment
+      .populate("user", "username")
+      .execPopulate();
+
+    response.json(populatedComment);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: "Something went wrong" });
+  }
 });
 
 //will be used for updating votes
