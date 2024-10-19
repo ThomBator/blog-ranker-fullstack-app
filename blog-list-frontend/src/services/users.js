@@ -12,6 +12,8 @@ const getOne = async (id) => {
 };
 
 const signUp = async (credentials) => {
+  console.log("Credentials in userService.signUp: ", credentials);
+
   const response = await axios.post(`${baseUrl}`, credentials);
   return response.data;
 };

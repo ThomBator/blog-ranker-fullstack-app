@@ -59,7 +59,6 @@ export const useLogin = () => {
     const user = await loginService.login(credentials);
     //Append a time to user to ensure that users are auto logged out in alignment with time the token will expire on sever
     if (user) {
-      user.loginTime = Date.now();
       dispatch({
         type: "SET",
         payload: user,
@@ -74,6 +73,8 @@ export const useSignUp = () => {
   //Probably should add some error handling and validation here?
   const [, dispatch] = useContext(UserContext);
   return async (credentials) => {
+    console.log("Credentials in useSignUp: ", credentials);
+
     const user = await userService.signUp(credentials);
     dispatch({
       type: "SET",

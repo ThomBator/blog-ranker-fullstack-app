@@ -72,12 +72,11 @@ const BlogLink = ({ blog }) => {
         0
       );
 
-      const initialUserVote =
-        blog.votes.users.find((vote) => vote.id === user.id)?.vote ?? 0;
-
-      setUserVote(initialUserVote);
-
       setTotalVotes(initialVotes);
+
+      if (blog.votes.users.length > 0) {
+        console.log("Blog users shape: ", blog.votes.users);
+      }
     }
   }, [blog]);
 

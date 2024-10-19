@@ -26,15 +26,15 @@ const SignUpForm = () => {
       notifyWith("Error. Passwords do not match");
     } else {
       try {
+        console.log("username in SignUpForm.js: ", username.value);
+        console.log("password in SignUpForm.js: ", password.value);
         await doSignUp({
           username: username.value,
           password: password.value,
         });
         notifyWith("Login Successful");
       } catch (error) {
-        notifyWith(
-          "Error. An account with this username or email already exists. Please try again"
-        );
+        notifyWith("An error occurred. Please contact the site administrator.");
       }
     }
   };
@@ -63,12 +63,16 @@ const SignUpForm = () => {
           <input id="password" placeholder="Password" {...password} />
         </div>
         <div className="formInput">
-          <label htmlFor="password">Re-enter password</label>
-          <input id="password" placeholder="Password" {...reEnterPassword} />
+          <label htmlFor="reEnterPassword">Re-enter password</label>
+          <input
+            id="reRenterPassword"
+            placeholder="Password"
+            {...reEnterPassword}
+          />
         </div>
         <div>
           <button id="login-button" type="submit">
-            login
+            Sign Up
           </button>
         </div>
         <div className={styles.logoutPrompt}>
