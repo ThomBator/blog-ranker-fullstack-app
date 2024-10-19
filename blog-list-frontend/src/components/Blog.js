@@ -2,30 +2,17 @@ import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useUser } from "../contexts/userContext";
-import { useVotes } from "../contexts/votesContext";
+
 import blogService from "../services/blogs";
 
 const Blog = () => {
   const id = useParams().id;
   const queryClient = useQueryClient();
   const user = useUser();
-  const { setVotes, updateVote, useVotesValues } = useVotes();
+  const [totalVotes, setTotalVotes] = useState(0);
+  const [userVote, setUserVote] = useState(0);
   const [comment, setComment] = useState("");
 
-  // Fetch blog data using react-query
-  const {
-    data: blog,
-    isLoading,
-    isError,
-  } = useQuery(["blogs", id], () => blogService.getOne(id), {
-    onSuccess: (data) => {
-      if (data && data.votes) {
-        setVotes(data.id, data.votes); // Set votes in context
-      }
-    },
-  });
-
-  // Mutation to update the blog on the server
   const updateBlogMutation = useMutation(
     ([id, updatedBlog]) => blogService.update(id, updatedBlog),
     {
@@ -38,22 +25,6 @@ const Blog = () => {
       },
     }
   );
-
-  const handleVote = (voteValue) => {
-    const newVote = { id: user.id, vote: voteValue };
-
-    // 1. Update the local vote state
-    updateVote(blog.id, newVote);
-
-    // 2. Prepare the updated blog with new votes
-    const updatedBlog = {
-      ...blog,
-      votes: [...blog.votes.filter((v) => v.id !== user.id), newVote],
-    };
-
-    // 3. Trigger the mutation to update the blog on the server
-    updateBlogMutation.mutate([blog.id, updatedBlog]);
-  };
 
   const addCommentMutation = useMutation(
     ([id, comment, user]) => blogService.addComment(id, comment, user),
@@ -71,12 +42,64 @@ const Blog = () => {
     }
   };
 
+  const handleVote = (voteValue) => {
+    const existingBlogVotes = blog.votes.users;
+
+    console.log("Existing blog votes in hanldeVote: ", existingBlogVotes);
+    //to create the updated blog votes I need to check if the user has already voted using .some()
+    //if they have then we replace their previous vote with map, else we add the new vote to the existing votes
+    const newBlogVotes = existingBlogVotes.some((vote) => vote.id === user.id)
+      ? existingBlogVotes.map((vote) =>
+          vote.id === user.id ? { ...vote, vote: voteValue } : vote
+        )
+      : [...existingBlogVotes, { id: user.id, vote: voteValue }];
+
+    const updatedTotalVotes = newBlogVotes.reduce(
+      (total, vote) => total + vote.vote,
+      0
+    );
+
+    console.log("newBlogVotes in handleVote: ", newBlogVotes);
+
+    setUserVote(voteValue);
+    setTotalVotes(updatedTotalVotes);
+
+    const updatedBlog = { ...blog, votes: { users: newBlogVotes } };
+
+    console.log("updatedBlog in handleVotes:  ", updatedBlog);
+
+    updateBlogMutation.mutate([updatedBlog.id, updatedBlog]);
+  };
+
+  const {
+    data: blog,
+    isLoading,
+    isError,
+  } = useQuery(["blogs", id], () => blogService.getOne(id), {
+    onSuccess: (data) => {
+      console.log("Data in Blog.js onSuccess:", data);
+
+      if (data?.votes?.users) {
+        console.log("users array: ", data.votes.users);
+        const initialVotes = data.votes.users.reduce(
+          (total, vote) => total + vote.vote,
+          0
+        );
+
+        const initialUserVote =
+          data.votes.users.find((vote) => vote.id === user.id)?.vote ?? 0;
+
+        setUserVote(initialUserVote);
+
+        setTotalVotes(initialVotes);
+      }
+    },
+    onError: (error) => {
+      console.log("Error fetching blog data in Blog.js: ", error);
+    },
+  });
+  if (isError) return <div>Error loading blog content</div>;
   if (isLoading) return <div>Loading...</div>;
-  if (isError || !blog)
-    return <div>Error loading blog, or blog not found.</div>;
-
-  const [totalVotesValue, userVote] = useVotesValues(blog.id); // Access vote values from context
-
   return (
     <div
       style={{
@@ -90,9 +113,9 @@ const Blog = () => {
       <h2>{blog.title}</h2>
       <p>Author: {blog.author}</p>
       <p>URL: {blog.url}</p>
+      <p>Votes: {totalVotes}</p>
 
       <div>
-        <p>Votes: {totalVotesValue}</p>
         {user ? (
           <>
             <button onClick={() => handleVote(1)} disabled={userVote === 1}>

@@ -7,7 +7,6 @@ import BlogForm from "./BlogForm";
 import BlogLink from "./BlogLink";
 import Toggleable from "./Toggleable";
 import { useUser } from "../contexts/userContext";
-import { VotesContextProvider } from "../contexts/votesContext";
 
 const Home = () => {
   const user = useUser();
@@ -55,12 +54,7 @@ const Home = () => {
       {blogs &&
         blogs.sort(byLikes).map((blog) => (
           <div className={styles.listItem} key={blog.id}>
-            {/*<Link to={`/blogs/${blog.id}`}>
-            {blog.title} by {blog.author}
-      </Link>*/}
-            <VotesContextProvider>
-              <BlogLink blog={blog} />
-            </VotesContextProvider>
+            <BlogLink blog={blog} />
           </div>
         ))}
     </div>

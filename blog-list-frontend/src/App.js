@@ -12,7 +12,6 @@ import User from "./components/User";
 import { Routes, Route } from "react-router-dom";
 import { useInitUser } from "./contexts/userContext";
 import styles from "./styles/App.module.css";
-import { VotesContextProvider } from "./contexts/votesContext";
 
 const App = () => {
   const initUser = useInitUser();
@@ -31,14 +30,7 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route
-          path="/blogs/:id"
-          element={
-            <VotesContextProvider>
-              <Blog />
-            </VotesContextProvider>
-          }
-        />
+        <Route path="/blogs/:id" element={<Blog />} />
         <Route path="/users" element={<Users />} />
         <Route path="/users/:id" element={<User />} />
         <Route path="/login" element={<LoginForm />} />
