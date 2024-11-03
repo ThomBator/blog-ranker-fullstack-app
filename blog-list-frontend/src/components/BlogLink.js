@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import styles from "../styles/BlogLink.module.css";
 import { useUser } from "../contexts/userContext";
 import { useMutation, useQueryClient } from "react-query";
-
 import blogService from "../services/blogs";
 
 const BlogLink = ({ blog }) => {
@@ -37,6 +36,16 @@ const BlogLink = ({ blog }) => {
     }
   );
 
+  const deleteBlogMutation = useMutation(([id]) => blogService.remove(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["blogs"]); // Re-fetch blog data
+      console.log("Blog post successfully updated");
+    },
+    onError: (error) => {
+      console.error("Error updating blog:", error);
+    },
+  });
+
   const handleVote = (voteValue) => {
     const existingBlogVotes = blog.votes.users;
 
@@ -65,6 +74,7 @@ const BlogLink = ({ blog }) => {
 
     updateBlogMutation.mutate([updatedBlog.id, updatedBlog]);
   };
+
   useEffect(() => {
     if (blog?.votes?.users) {
       const initialVotes = blog.votes.users.reduce(
@@ -108,7 +118,12 @@ const BlogLink = ({ blog }) => {
       <div className={styles.userInfo}>
         <p>Posted by {blog.user.username}</p>
         {user && user.id === blog.user.id && (
-          <button className={styles.deleteButton}>Delete</button>
+          <button
+            className={styles.deleteButton}
+            onClick={() => deleteBlogMutation.mutate([blog.id])}
+          >
+            Delete
+          </button>
         )}
       </div>
     </div>

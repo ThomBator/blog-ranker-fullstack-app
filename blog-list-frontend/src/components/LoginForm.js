@@ -44,10 +44,20 @@ const LoginForm = () => {
           <h2>Sign in</h2>
         </div>
         <div>
-          <input id="username" placeholder="Username" {...username} />
+          <input
+            id="username"
+            placeholder="Username"
+            {...username}
+            autoComplete="username"
+          />
         </div>
         <div>
-          <input id="password" placeholder="Password" {...password} />
+          <input
+            id="password"
+            placeholder="Password"
+            {...password}
+            autoComplete="current-password"
+          />
         </div>
         <div>
           <button id="login-button" className="secondaryButton" type="submit">

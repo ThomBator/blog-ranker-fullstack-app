@@ -12,6 +12,7 @@ const Blog = () => {
   const [totalVotes, setTotalVotes] = useState(0);
   const [userVote, setUserVote] = useState(0);
   const [comment, setComment] = useState("");
+  const [hasBeenDeleted, setHasBeenDeleted] = useState(false);
 
   const updateBlogMutation = useMutation(
     ([id, updatedBlog]) => blogService.update(id, updatedBlog),
@@ -33,6 +34,16 @@ const Blog = () => {
       onError: (error) => console.error("Error adding comment:", error),
     }
   );
+
+  const deleteBlogMutation = useMutation(([id]) => blogService.remove(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["blogs"]); // Re-fetch blog data
+      setHasBeenDeleted(true);
+    },
+    onError: (error) => {
+      console.error("Error updating blog:", error);
+    },
+  });
 
   const handleAddComment = (e) => {
     e.preventDefault();
@@ -100,6 +111,15 @@ const Blog = () => {
   });
   if (isError) return <div>Error loading blog content</div>;
   if (isLoading) return <div>Loading...</div>;
+
+  if (hasBeenDeleted) {
+    return (
+      <div>
+        This Blog post has been deleted successfully.
+        <Link to="/">Return to Homepage</Link>
+      </div>
+    );
+  }
   return (
     <div
       style={{
@@ -124,6 +144,15 @@ const Blog = () => {
             <button onClick={() => handleVote(-1)} disabled={userVote === -1}>
               Downvote
             </button>
+
+            <div>
+              <p>Posted by {blog.user.username}</p>
+              {user.id === blog.user.id && (
+                <button onClick={() => deleteBlogMutation.mutate([blog.id])}>
+                  Delete
+                </button>
+              )}
+            </div>
           </>
         ) : (
           <p>
