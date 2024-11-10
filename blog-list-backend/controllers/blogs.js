@@ -104,15 +104,38 @@ blogRouter.post("/:id/comments", async (request, response) => {
     await blog.save();
 
     // Populate the comment with user details and send the response
-    const populatedComment = await savedComment
-      .populate("user", "username")
-      .execPopulate();
+    const populatedComment = await savedComment.populate("user", "username");
 
     response.json(populatedComment);
   } catch (error) {
     console.error(error);
     response.status(500).json({ error: "Something went wrong" });
   }
+});
+
+//delete comment from blog
+blogRouter.delete("/:blogId/comments/:commentId", async (request, response) => {
+  const deletedComment = await Comment.findByIdAndRemove(
+    request.params.commentId
+  );
+  console.log(deletedComment);
+
+  const user = await User.findById(deletedComment.user.id);
+
+  console.log("User in delete Comment route on server", user);
+
+  if (!user) {
+    return response.status(404).json({ error: "User not found" });
+  }
+
+  //delete comment assocaition from assocaited user document
+  user.comments = user.comments.filter(
+    (comment) => !comment._id.equals(deletedComment.id)
+  );
+
+  await user.save();
+
+  response.status(204).end();
 });
 
 //will be used for updating votes
@@ -133,6 +156,7 @@ blogRouter.put("/:id", async (request, response) => {
   response.json(updatedBlog);
 });
 
+//Delete blog post
 blogRouter.delete("/:id", async (request, response) => {
   const deletedBlog = await Blog.findByIdAndRemove(request.params.id);
   console.log(deletedBlog);

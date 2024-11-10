@@ -30,6 +30,19 @@ const addComment = async (id, comment, user) => {
     comment,
     user,
   });
+
+  console.log(
+    "Comment returned from server in addComment in /services/blogs.js: ",
+    response.data
+  );
+
+  return response.data;
+};
+
+const deleteComment = async (blogId, commentId) => {
+  const response = await axios.delete(
+    `${baseUrl}/${blogId}/comments/${commentId}`
+  );
   return response.data;
 };
 
@@ -63,4 +76,12 @@ const remove = async (id) => {
   return response.data;
 };
 
-export default { getAll, getOne, create, update, remove, addComment };
+export default {
+  getAll,
+  getOne,
+  create,
+  update,
+  remove,
+  addComment,
+  deleteComment,
+};

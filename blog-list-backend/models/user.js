@@ -18,6 +18,14 @@ const userSchema = mongoose.Schema({
       },
     },
   ],
+  comments: [
+    {
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    },
+  ],
 });
 
 userSchema.plugin(uniqueValidator);
