@@ -120,6 +120,9 @@ const Blog = () => {
       </div>
     );
   }
+
+  console.log("Blog comments: ", blog.comments);
+
   return (
     <div
       style={{
@@ -177,7 +180,10 @@ const Blog = () => {
           )}
           <ul>
             {blog.comments.map((comment) => (
-              <li key={comment._id}>{comment.comment}</li>
+              <li key={comment.id}>
+                <p>{comment.comment}</p>
+                <p>Posted by poster name goes here</p>
+              </li>
             ))}
           </ul>
         </>
