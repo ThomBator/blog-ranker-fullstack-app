@@ -19,7 +19,7 @@ const checkIfTokenIsExpired = (token) => {
   }
 
   const currentTime = Date.now() / 1000;
-  console.log("Current time ", currentTime);
+
   return decodedToken.exp < currentTime;
 };
 

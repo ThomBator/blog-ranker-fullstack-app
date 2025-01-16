@@ -62,7 +62,6 @@ export const useNotificationDispatch = () => {
   }
 
   return (message) => {
-    console.log("MESSAGE IS:", message);
     dispatch({ message, type: "SET" });
     setTimeout(() => {
       dispatch({ type: "CLEAR" });

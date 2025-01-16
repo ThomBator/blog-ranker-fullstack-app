@@ -19,7 +19,6 @@ const Blog = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["blogs"]); // Re-fetch blog data
-        console.log("Blog post successfully updated");
       },
       onError: (error) => {
         console.error("Error updating blog:", error);
@@ -56,7 +55,6 @@ const Blog = () => {
   const handleVote = (voteValue) => {
     const existingBlogVotes = blog.votes.users;
 
-    console.log("Existing blog votes in hanldeVote: ", existingBlogVotes);
     //to create the updated blog votes I need to check if the user has already voted using .some()
     //if they have then we replace their previous vote with map, else we add the new vote to the existing votes
     const newBlogVotes = existingBlogVotes.some((vote) => vote.id === user.id)
@@ -70,14 +68,10 @@ const Blog = () => {
       0
     );
 
-    console.log("newBlogVotes in handleVote: ", newBlogVotes);
-
     setUserVote(voteValue);
     setTotalVotes(updatedTotalVotes);
 
     const updatedBlog = { ...blog, votes: { users: newBlogVotes } };
-
-    console.log("updatedBlog in handleVotes:  ", updatedBlog);
 
     updateBlogMutation.mutate([updatedBlog.id, updatedBlog]);
   };
@@ -88,10 +82,7 @@ const Blog = () => {
     isError,
   } = useQuery(["blogs", id], () => blogService.getOne(id), {
     onSuccess: (data) => {
-      console.log("Data in Blog.js onSuccess:", data);
-
       if (data?.votes?.users) {
-        console.log("users array: ", data.votes.users);
         const initialVotes = data.votes.users.reduce(
           (total, vote) => total + vote.vote,
           0
@@ -106,7 +97,7 @@ const Blog = () => {
       }
     },
     onError: (error) => {
-      console.log("Error fetching blog data in Blog.js: ", error);
+      console.error("Error fetching blog data in Blog.js: ", error);
     },
   });
   if (isError) return <div>Error loading blog content</div>;
@@ -120,8 +111,6 @@ const Blog = () => {
       </div>
     );
   }
-
-  console.log("Blog comments: ", blog.comments);
 
   return (
     <div

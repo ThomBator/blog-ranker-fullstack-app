@@ -9,7 +9,6 @@ const Users = () => {
 
     userService.getAll().then((userList) => {
       setUsers(userList);
-      console.log(userList);
     });
   }, []);
 

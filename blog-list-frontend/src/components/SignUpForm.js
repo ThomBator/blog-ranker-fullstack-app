@@ -26,8 +26,6 @@ const SignUpForm = () => {
       notifyWith("Error. Passwords do not match");
     } else {
       try {
-        console.log("username in SignUpForm.js: ", username.value);
-        console.log("password in SignUpForm.js: ", password.value);
         await doSignUp({
           username: username.value,
           password: password.value,

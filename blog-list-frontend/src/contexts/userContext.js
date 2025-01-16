@@ -73,8 +73,6 @@ export const useSignUp = () => {
   //Probably should add some error handling and validation here?
   const [, dispatch] = useContext(UserContext);
   return async (credentials) => {
-    console.log("Credentials in useSignUp: ", credentials);
-
     const user = await userService.signUp(credentials);
     dispatch({
       type: "SET",

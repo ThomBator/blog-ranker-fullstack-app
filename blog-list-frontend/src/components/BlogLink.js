@@ -28,7 +28,6 @@ const BlogLink = ({ blog }) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["blogs"]); // Re-fetch blog data
-        console.log("Blog post successfully updated");
       },
       onError: (error) => {
         console.error("Error updating blog:", error);
@@ -39,7 +38,6 @@ const BlogLink = ({ blog }) => {
   const deleteBlogMutation = useMutation(([id]) => blogService.remove(id), {
     onSuccess: () => {
       queryClient.invalidateQueries(["blogs"]); // Re-fetch blog data
-      console.log("Blog post successfully updated");
     },
     onError: (error) => {
       console.error("Error updating blog:", error);
@@ -49,7 +47,6 @@ const BlogLink = ({ blog }) => {
   const handleVote = (voteValue) => {
     const existingBlogVotes = blog.votes.users;
 
-    console.log("Existing blog votes in hanldeVote: ", existingBlogVotes);
     //to create the updated blog votes I need to check if the user has already voted using .some()
     //if they have then we replace their previous vote with map, else we add the new vote to the existing votes
     const newBlogVotes = existingBlogVotes.some((vote) => vote.id === user.id)
@@ -63,14 +60,10 @@ const BlogLink = ({ blog }) => {
       0
     );
 
-    console.log("newBlogVotes in handleVote: ", newBlogVotes);
-
     setUserVote(voteValue);
     setTotalVotes(updatedTotalVotes);
 
     const updatedBlog = { ...blog, votes: { users: newBlogVotes } };
-
-    console.log("updatedBlog in handleVotes:  ", updatedBlog);
 
     updateBlogMutation.mutate([updatedBlog.id, updatedBlog]);
   };
@@ -83,10 +76,6 @@ const BlogLink = ({ blog }) => {
       );
 
       setTotalVotes(initialVotes);
-
-      if (blog.votes.users.length > 0) {
-        console.log("Blog users shape: ", blog.votes.users);
-      }
     }
   }, [blog]);
 
@@ -144,7 +133,7 @@ BlogLink.propTypes = {
         })
       ).isRequired,
     }).isRequired,
-    comments: PropTypes.arrayOf(PropTypes.object).isRequired,
+    comments: PropTypes.arrayOf(PropTypes.string.isRequired),
     user: PropTypes.shape({
       username: PropTypes.string.isRequired,
       id: PropTypes.string.isRequired,

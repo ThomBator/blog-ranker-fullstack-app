@@ -14,7 +14,6 @@ const BlogForm = () => {
   const logout = useLogout();
   const user = useUser();
   const token = user ? user.token : null;
-  console.log("Token, ", user.token);
 
   const create = blogService.create;
 

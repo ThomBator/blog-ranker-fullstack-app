@@ -31,11 +31,6 @@ const addComment = async (id, comment, user) => {
     user,
   });
 
-  console.log(
-    "Comment returned from server in addComment in /services/blogs.js: ",
-    response.data
-  );
-
   return response.data;
 };
 
