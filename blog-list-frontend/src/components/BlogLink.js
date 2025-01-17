@@ -91,10 +91,10 @@ const BlogLink = ({ blog }) => {
         {user ? (
           <>
             <button onClick={() => handleVote(1)} disabled={userVote === 1}>
-              Upvote
+              &#11014;
             </button>
             <button onClick={() => handleVote(-1)} disabled={userVote === -1}>
-              Downvote
+              &#11015;
             </button>
           </>
         ) : (

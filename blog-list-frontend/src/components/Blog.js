@@ -53,27 +53,29 @@ const Blog = () => {
   };
 
   const handleVote = (voteValue) => {
-    const existingBlogVotes = blog.votes.users;
+    if (user) {
+      const existingBlogVotes = blog.votes.users;
 
-    //to create the updated blog votes I need to check if the user has already voted using .some()
-    //if they have then we replace their previous vote with map, else we add the new vote to the existing votes
-    const newBlogVotes = existingBlogVotes.some((vote) => vote.id === user.id)
-      ? existingBlogVotes.map((vote) =>
-          vote.id === user.id ? { ...vote, vote: voteValue } : vote
-        )
-      : [...existingBlogVotes, { id: user.id, vote: voteValue }];
+      //to create the updated blog votes I need to check if the user has already voted using .some()
+      //if they have then we replace their previous vote with map, else we add the new vote to the existing votes
+      const newBlogVotes = existingBlogVotes.some((vote) => vote.id === user.id)
+        ? existingBlogVotes.map((vote) =>
+            vote.id === user.id ? { ...vote, vote: voteValue } : vote
+          )
+        : [...existingBlogVotes, { id: user.id, vote: voteValue }];
 
-    const updatedTotalVotes = newBlogVotes.reduce(
-      (total, vote) => total + vote.vote,
-      0
-    );
+      const updatedTotalVotes = newBlogVotes.reduce(
+        (total, vote) => total + vote.vote,
+        0
+      );
 
-    setUserVote(voteValue);
-    setTotalVotes(updatedTotalVotes);
+      setUserVote(voteValue);
+      setTotalVotes(updatedTotalVotes);
 
-    const updatedBlog = { ...blog, votes: { users: newBlogVotes } };
+      const updatedBlog = { ...blog, votes: { users: newBlogVotes } };
 
-    updateBlogMutation.mutate([updatedBlog.id, updatedBlog]);
+      updateBlogMutation.mutate([updatedBlog.id, updatedBlog]);
+    }
   };
 
   const {
@@ -88,10 +90,12 @@ const Blog = () => {
           0
         );
 
-        const initialUserVote =
-          data.votes.users.find((vote) => vote.id === user.id)?.vote ?? 0;
+        if (user) {
+          const initialUserVote =
+            data.votes.users.find((vote) => vote.id === user.id)?.vote ?? 0;
 
-        setUserVote(initialUserVote);
+          setUserVote(initialUserVote);
+        }
 
         setTotalVotes(initialVotes);
       }
@@ -111,6 +115,8 @@ const Blog = () => {
       </div>
     );
   }
+
+  console.log(blog);
 
   return (
     <div
@@ -139,7 +145,7 @@ const Blog = () => {
 
             <div>
               <p>Posted by {blog.user.username}</p>
-              {user.id === blog.user.id && (
+              {user && user.id === blog.user.id && (
                 <button onClick={() => deleteBlogMutation.mutate([blog.id])}>
                   Delete
                 </button>
@@ -172,6 +178,7 @@ const Blog = () => {
               <li key={comment.id}>
                 <p>{comment.comment}</p>
                 <p>Posted by poster name goes here</p>
+                {user && comment.user === user?.id && <button>Delete</button>}
               </li>
             ))}
           </ul>
