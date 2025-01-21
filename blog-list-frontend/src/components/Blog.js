@@ -168,22 +168,22 @@ const Blog = () => {
               onChange={(e) => setComment(e.target.value)}
             />
             <button type="submit">Add Comment</button>
-          </form>
-          <h3>Comments</h3>
-          {(!blog.comments || blog.comments.length === 0) && (
-            <p>No comments yet. Please add one!</p>
-          )}
-          <ul>
-            {blog.comments.map((comment) => (
-              <li key={comment.id}>
-                <p>{comment.comment}</p>
-                <p>Posted by poster name goes here</p>
-                {user && comment.user === user?.id && <button>Delete</button>}
-              </li>
-            ))}
-          </ul>
+          </form>{" "}
         </>
       )}
+      <h3>Comments</h3>
+      {(!blog.comments || blog.comments.length === 0) && (
+        <p>No comments yet. Please add one!</p>
+      )}
+      <ul>
+        {blog.comments.map((comment) => (
+          <li key={comment.id}>
+            <p>{comment.comment}</p>
+            <p>Posted by {comment.user.username} </p>
+            {user && comment.user === user?.id && <button>Delete</button>}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

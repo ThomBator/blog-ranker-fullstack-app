@@ -18,6 +18,8 @@ const getAll = async () => {
 const getOne = async (id) => {
   const response = await axios.get(`${baseUrl}/${id}`);
 
+  console.log("Response from getOne api call:", response);
+
   const blog = response.data;
   if (!blog.comments) {
     blog.comments = [];

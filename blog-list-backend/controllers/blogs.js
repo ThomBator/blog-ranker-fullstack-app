@@ -23,10 +23,14 @@ blogRouter.get("/", async (request, response) => {
 });
 //get specific blog
 blogRouter.get("/:id", async (request, response) => {
-  const blog = await Blog.findById(request.params.id)
-    .populate("user")
-    .populate("comments");
-
+  const blog = await Blog.findById(request.params.id).populate({
+    path: "comments",
+    populate: {
+      path: "user",
+      select: "id username",
+    },
+  });
+  console.log(JSON.stringify(blog.comments, null, 2));
   response.json(blog);
 });
 
