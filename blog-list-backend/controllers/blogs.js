@@ -23,13 +23,15 @@ blogRouter.get("/", async (request, response) => {
 });
 //get specific blog
 blogRouter.get("/:id", async (request, response) => {
-  const blog = await Blog.findById(request.params.id).populate({
-    path: "comments",
-    populate: {
-      path: "user",
-      select: "id username",
-    },
-  });
+  const blog = await Blog.findById(request.params.id)
+    .populate("user")
+    .populate({
+      path: "comments",
+      populate: {
+        path: "user",
+        select: "id username",
+      },
+    });
   console.log(JSON.stringify(blog.comments, null, 2));
   response.json(blog);
 });
@@ -173,7 +175,9 @@ blogRouter.delete("/:id", async (request, response) => {
     return response.status(404).json({ error: "User not found" });
   }
 
-  user.blogs = user.blogs.filter((blog) => !blog._id.equals(deletedBlog._id));
+  user.blogs = (user.blogs ?? []).filter(
+    (blog) => !blog._id.equals(deletedBlog._id)
+  );
 
   await user.save();
 

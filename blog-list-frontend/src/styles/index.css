@@ -85,3 +85,15 @@ button:hover {
   display: flex;
   flex-direction: column;
 }
+
+.voteArrow,
+.deleteButton {
+  color: var(--dark-color);
+  background: var(--lightest-color);
+  border: none;
+  font-size: var(--font-s);
+}
+
+.voteArrow:disabled {
+  color: var(--medium-color);
+}

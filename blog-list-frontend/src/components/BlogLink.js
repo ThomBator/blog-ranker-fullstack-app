@@ -56,13 +56,7 @@ const BlogLink = ({ blog }) => {
         )
       : [...existingBlogVotes, { id: user.id, vote: voteValue }];
 
-    const updatedTotalVotes = newBlogVotes.reduce(
-      (total, vote) => total + vote.vote,
-      0
-    );
-
     setUserVote(voteValue);
-    setTotalVotes(updatedTotalVotes);
 
     const updatedBlog = { ...blog, votes: { users: newBlogVotes } };
 
@@ -76,7 +70,9 @@ const BlogLink = ({ blog }) => {
         0
       );
 
-      setTotalVotes(initialVotes);
+      const votesForDisplay = initialVotes > 0 ? initialVotes : 0;
+
+      setTotalVotes(votesForDisplay);
     }
   }, [blog]);
 
@@ -91,10 +87,18 @@ const BlogLink = ({ blog }) => {
         <p>Votes: {totalVotes}</p>
         {user ? (
           <>
-            <button onClick={() => handleVote(1)} disabled={userVote === 1}>
+            <button
+              className="voteArrow"
+              onClick={() => handleVote(1)}
+              disabled={userVote === 1}
+            >
               &#11014;
             </button>
-            <button onClick={() => handleVote(-1)} disabled={userVote === -1}>
+            <button
+              className="voteArrow"
+              onClick={() => handleVote(-1)}
+              disabled={userVote === -1}
+            >
               &#11015;
             </button>
           </>
@@ -109,10 +113,10 @@ const BlogLink = ({ blog }) => {
         <p>Posted by {blog.user.username}</p>
         {user && user.id === blog.user.id && (
           <button
-            className={styles.deleteButton}
+            className="deleteButton"
             onClick={() => deleteBlogMutation.mutate([blog.id])}
           >
-            Delete
+            &#128465;
           </button>
         )}
       </div>

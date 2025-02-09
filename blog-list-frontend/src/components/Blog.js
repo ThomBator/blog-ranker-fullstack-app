@@ -136,18 +136,29 @@ const Blog = () => {
       <div>
         {user ? (
           <>
-            <button onClick={() => handleVote(1)} disabled={userVote === 1}>
-              Upvote
+            <button
+              className="voteArrow"
+              onClick={() => handleVote(1)}
+              disabled={userVote === 1}
+            >
+              &#11014;
             </button>
-            <button onClick={() => handleVote(-1)} disabled={userVote === -1}>
-              Downvote
+            <button
+              className="voteArrow"
+              onClick={() => handleVote(-1)}
+              disabled={userVote === -1}
+            >
+              &#11015;
             </button>
 
             <div>
               <p>Posted by {blog.user.username}</p>
-              {user && user.id === blog.user.id && (
-                <button onClick={() => deleteBlogMutation.mutate([blog.id])}>
-                  Delete
+              {user.id === blog.user.id && (
+                <button
+                  className="deleteButton"
+                  onClick={() => deleteBlogMutation.mutate([blog.id])}
+                >
+                  &#128465;
                 </button>
               )}
             </div>
@@ -180,7 +191,9 @@ const Blog = () => {
           <li key={comment.id}>
             <p>{comment.comment}</p>
             <p>Posted by {comment.user.username} </p>
-            {user && comment.user === user?.id && <button>Delete</button>}
+            {user && comment.user.id === user?.id && (
+              <button className="deleteButton">&#128465;</button>
+            )}
           </li>
         ))}
       </ul>

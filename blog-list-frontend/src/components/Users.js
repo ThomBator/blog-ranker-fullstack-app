@@ -24,6 +24,7 @@ const Users = () => {
         <tbody>
           {users.map((user) => (
             <tr key={user?.id}>
+              {console.log("User in map: ", user)}
               <td>
                 <Link to={`/users/${user.id}`}>{user.username}</Link>
               </td>
