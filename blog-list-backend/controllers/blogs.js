@@ -32,7 +32,7 @@ blogRouter.get("/:id", async (request, response) => {
         select: "id username",
       },
     });
-  console.log(JSON.stringify(blog.comments, null, 2));
+
   response.json(blog);
 });
 
@@ -78,10 +78,6 @@ blogRouter.post("/", async (request, response) => {
 blogRouter.post("/:id/comments", async (request, response) => {
   const { comment, user } = request.body;
 
-  console.log("Request body:", request.body);
-
-  console.log("User: ", user);
-
   try {
     const blog = await Blog.findById(request.params.id);
 
@@ -114,7 +110,6 @@ blogRouter.post("/:id/comments", async (request, response) => {
 
     response.json(populatedComment);
   } catch (error) {
-    console.error(error);
     response.status(500).json({ error: "Something went wrong" });
   }
 });
@@ -124,11 +119,8 @@ blogRouter.delete("/:blogId/comments/:commentId", async (request, response) => {
   const deletedComment = await Comment.findByIdAndRemove(
     request.params.commentId
   );
-  console.log(deletedComment);
 
-  const user = await User.findById(deletedComment.user.id);
-
-  console.log("User in delete Comment route on server", user);
+  const user = await User.findById(deletedComment.user);
 
   if (!user) {
     return response.status(404).json({ error: "User not found" });
@@ -136,7 +128,7 @@ blogRouter.delete("/:blogId/comments/:commentId", async (request, response) => {
 
   //delete comment assocaition from assocaited user document
   user.comments = user.comments.filter(
-    (comment) => !comment._id.equals(deletedComment.id)
+    (comment) => !comment._id.equals(deletedComment._id)
   );
 
   await user.save();
@@ -154,7 +146,6 @@ blogRouter.put("/:id", async (request, response) => {
     votes: body.votes,
   };
 
-  console.log("BLOGS FROM PUT ROUTE", request);
   //new: true ensures you get the updated post, not the pre-updated version returned
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
     new: true,
@@ -165,11 +156,8 @@ blogRouter.put("/:id", async (request, response) => {
 //Delete blog post
 blogRouter.delete("/:id", async (request, response) => {
   const deletedBlog = await Blog.findByIdAndRemove(request.params.id);
-  console.log(deletedBlog);
 
   const user = await User.findById(deletedBlog.user);
-
-  console.log("User ", user);
 
   if (!user) {
     return response.status(404).json({ error: "User not found" });

@@ -36,10 +36,15 @@ const addComment = async (id, comment, user) => {
   return response.data;
 };
 
-const deleteComment = async (blogId, commentId) => {
+const removeComment = async (blogId, commentId) => {
   const response = await axios.delete(
     `${baseUrl}/${blogId}/comments/${commentId}`
   );
+  console.log(
+    "data returned after delete comment in services: ",
+    response.data
+  );
+
   return response.data;
 };
 
@@ -80,5 +85,5 @@ export default {
   update,
   remove,
   addComment,
-  deleteComment,
+  removeComment,
 };

@@ -44,6 +44,18 @@ const Blog = () => {
     },
   });
 
+  const deleteCommentMutation = useMutation(
+    ([blogId, commentId]) => blogService.removeComment(blogId, commentId),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["blogs"]); // Re-fetch blog data
+      },
+      onError: (error) => {
+        console.error("Error updating blog:", error);
+      },
+    }
+  );
+
   const handleAddComment = (e) => {
     e.preventDefault();
     if (comment.trim()) {
@@ -192,7 +204,14 @@ const Blog = () => {
             <p>{comment.comment}</p>
             <p>Posted by {comment.user.username} </p>
             {user && comment.user.id === user?.id && (
-              <button className="deleteButton">&#128465;</button>
+              <button
+                onClick={() =>
+                  deleteCommentMutation.mutate([blog.id, comment.id])
+                }
+                className="deleteButton"
+              >
+                &#128465;
+              </button>
             )}
           </li>
         ))}
