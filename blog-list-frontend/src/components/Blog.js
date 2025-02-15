@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useUser } from "../contexts/userContext";
+import { useNotificationDispatch } from "../contexts/notificationContext";
+import Notification from "./Notifications";
 
 import blogService from "../services/blogs";
 
@@ -13,7 +15,15 @@ const Blog = () => {
   const [userVote, setUserVote] = useState(0);
   const [comment, setComment] = useState("");
   const [hasBeenDeleted, setHasBeenDeleted] = useState(false);
+  const notifyWith = useNotificationDispatch();
 
+  const createUTCDate = (dateString) => {
+    const newDate = new Date(dateString);
+
+    return newDate.toUTCString();
+  };
+
+  //updates blog when votes change with upvote or downvote
   const updateBlogMutation = useMutation(
     ([id, updatedBlog]) => blogService.update(id, updatedBlog),
     {
@@ -38,6 +48,7 @@ const Blog = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["blogs"]); // Re-fetch blog data
       setHasBeenDeleted(true);
+      notifyWith("Your blog has been successfully deleted");
     },
     onError: (error) => {
       console.error("Error updating blog:", error);
@@ -49,6 +60,7 @@ const Blog = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["blogs"]); // Re-fetch blog data
+        notifyWith("Your comment has been successfully deleted");
       },
       onError: (error) => {
         console.error("Error updating blog:", error);
@@ -202,7 +214,14 @@ const Blog = () => {
         {blog.comments.map((comment) => (
           <li key={comment.id}>
             <p>{comment.comment}</p>
-            <p>Posted by {comment.user.username} </p>
+            <p>
+              Posted by{" "}
+              <Link to={`/users/${comment.user.id}`}>
+                {comment.user.username}
+              </Link>{" "}
+              on {createUTCDate(comment.createdAt)}{" "}
+            </p>
+
             {user && comment.user.id === user?.id && (
               <button
                 onClick={() =>
@@ -216,6 +235,7 @@ const Blog = () => {
           </li>
         ))}
       </ul>
+      <Notification />
     </div>
   );
 };

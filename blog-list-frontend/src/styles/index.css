@@ -89,9 +89,16 @@ button:hover {
 .voteArrow,
 .deleteButton {
   color: var(--dark-color);
-  background: var(--lightest-color);
+  background: transparent;
   border: none;
   font-size: var(--font-s);
+  transition: all 0.2s ease-in-out;
+}
+
+.voteArrow:hover,
+.deleteButton:hover {
+  color: var(--medium-color);
+  transform: scale(1.2);
 }
 
 .voteArrow:disabled {

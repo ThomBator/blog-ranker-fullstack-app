@@ -1,0 +1,15 @@
+.footerContainer {
+  background: var(--primary-color);
+  min-height: 3rem;
+  width: 100%;
+  text-align: center;
+  padding: 1rem;
+}
+
+.footerParagraph {
+  color: #ffffff;
+}
+
+.footerParagraph a {
+  color: #ffffff !important;
+}
