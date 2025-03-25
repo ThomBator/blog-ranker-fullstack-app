@@ -104,3 +104,12 @@ button:hover {
 .voteArrow:disabled {
   color: var(--medium-color);
 }
+
+/*Container for each page-level component*/
+
+.pageContainer {
+  margin: auto;
+  padding: 1rem;
+  width: 80%;
+  min-height: 90vh;
+}

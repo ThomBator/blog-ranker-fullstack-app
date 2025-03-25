@@ -1,0 +1,16 @@
+.userPageHeader {
+  font-size: var(--font-regular);
+  margin-bottom: var(--margin-0);
+}
+
+.listItem {
+  margin-bottom: var(--margin-3);
+  margin-right: var(--margin-0);
+  padding-right: var(--padding-0);
+}
+
+.list {
+  list-style: none;
+  margin-inline: var(--margin-0);
+  padding-inline: var(--padding-0);
+}

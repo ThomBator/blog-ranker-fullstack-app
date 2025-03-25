@@ -3,6 +3,9 @@ import userService from "../services/users";
 import blogService from "../services/blogs";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
+import BlogLink from "./BlogLink";
+import styles from "../styles/User.module.css";
+
 const User = () => {
   const id = useParams().id;
 
@@ -20,13 +23,21 @@ const User = () => {
     : [];
 
   return (
-    <div>
-      {user && <h2> {user.name}</h2>}
+    <div className="pageContainer">
+      {user && (
+        <h1 className={styles.userPageHeader}>
+          {" "}
+          Posts shared by {user.username}
+        </h1>
+      )}
 
-      <h3>added blogs</h3>
-      <ul>
+      <ul className={styles.list}>
         {userBlogs &&
-          userBlogs.map((blog) => <li key={blog.id}>{blog.title}</li>)}
+          userBlogs.map((blog) => (
+            <li className={styles.listItem} key={blog.id}>
+              <BlogLink blog={blog} />
+            </li>
+          ))}
       </ul>
 
       {userBlogs.length === 0 && <p>no blogs created yet</p>}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import userService from "../services/users";
 import { Link } from "react-router-dom";
+import styles from "../styles/Users.module.css";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -13,13 +14,11 @@ const Users = () => {
   }, []);
 
   return (
-    <div>
-      <table>
+    <div className="pageContainer">
+      <table className={styles.tableStyles}>
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Blogs Created</th>
-          </tr>
+          <th>Name</th>
+          <th>Blogs Created</th>
         </thead>
         <tbody>
           {users.map((user) => (
@@ -28,7 +27,9 @@ const Users = () => {
               <td>
                 <Link to={`/users/${user.id}`}>{user.username}</Link>
               </td>
-              <td>{user.blogs?.length || 0}</td>
+              <td className={styles.numberColStyle}>
+                {user.blogs?.length || 0}
+              </td>
             </tr>
           ))}
         </tbody>

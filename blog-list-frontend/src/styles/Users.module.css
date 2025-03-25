@@ -1,0 +1,8 @@
+.tableStyles {
+  border-spacing: var(--margin-4);
+  text-align: left;
+}
+
+.numberColStyle {
+  padding-left: var(--padding-2);
+}

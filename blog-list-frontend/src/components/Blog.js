@@ -1,27 +1,24 @@
-import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useUser } from "../contexts/userContext";
 import { useNotificationDispatch } from "../contexts/notificationContext";
 import Notification from "./Notifications";
-
 import blogService from "../services/blogs";
+import styles from "../styles/Blog.module.css";
+import createLocalDate from "../utils/createLocalDate";
+import shortURL from "../utils/shortUrl";
 
 const Blog = () => {
   const id = useParams().id;
   const queryClient = useQueryClient();
   const user = useUser();
   const [totalVotes, setTotalVotes] = useState(0);
-  const [userVote, setUserVote] = useState(0);
+  const [userVote] = useState(0);
   const [comment, setComment] = useState("");
   const [hasBeenDeleted, setHasBeenDeleted] = useState(false);
   const notifyWith = useNotificationDispatch();
-
-  const createUTCDate = (dateString) => {
-    const newDate = new Date(dateString);
-
-    return newDate.toUTCString();
-  };
+  const navigate = useNavigate();
 
   //updates blog when votes change with upvote or downvote
   const updateBlogMutation = useMutation(
@@ -88,14 +85,6 @@ const Blog = () => {
           )
         : [...existingBlogVotes, { id: user.id, vote: voteValue }];
 
-      const updatedTotalVotes = newBlogVotes.reduce(
-        (total, vote) => total + vote.vote,
-        0
-      );
-
-      setUserVote(voteValue);
-      setTotalVotes(updatedTotalVotes);
-
       const updatedBlog = { ...blog, votes: { users: newBlogVotes } };
 
       updateBlogMutation.mutate([updatedBlog.id, updatedBlog]);
@@ -107,34 +96,38 @@ const Blog = () => {
     isLoading,
     isError,
   } = useQuery(["blogs", id], () => blogService.getOne(id), {
-    onSuccess: (data) => {
-      if (data?.votes?.users) {
-        const initialVotes = data.votes.users.reduce(
-          (total, vote) => total + vote.vote,
-          0
-        );
-
-        if (user) {
-          const initialUserVote =
-            data.votes.users.find((vote) => vote.id === user.id)?.vote ?? 0;
-
-          setUserVote(initialUserVote);
-        }
-
-        setTotalVotes(initialVotes);
-      }
-    },
     onError: (error) => {
       console.error("Error fetching blog data in Blog.js: ", error);
     },
   });
+
+  useEffect(() => {
+    if (blog?.votes?.users) {
+      const initialVotes = blog.votes.users.reduce(
+        (total, vote) => total + vote.vote,
+        0
+      );
+
+      const votesForDisplay = initialVotes > 0 ? initialVotes : 0;
+
+      setTotalVotes(votesForDisplay);
+    }
+    if (hasBeenDeleted) {
+      const timer = setTimeout(() => {
+        navigate("/");
+        clearTimeout(timer);
+      }, 5000);
+    }
+  }, [navigate, hasBeenDeleted, blog]);
+
   if (isError) return <div>Error loading blog content</div>;
   if (isLoading) return <div>Loading...</div>;
 
   if (hasBeenDeleted) {
     return (
-      <div>
-        This Blog post has been deleted successfully.
+      <div className="pageContainer">
+        This Blog post has been deleted successfully. If you are not returned to
+        the home page in 5 seconds click the link below
         <Link to="/">Return to Homepage</Link>
       </div>
     );
@@ -143,27 +136,29 @@ const Blog = () => {
   console.log(blog);
 
   return (
-    <div
-      style={{
-        paddingTop: 10,
-        paddingLeft: 10,
-        border: "solid",
-        borderWidth: 1,
-        marginBottom: 5,
-      }}
-    >
-      <h2>{blog.title}</h2>
-      <p>Author: {blog.author}</p>
-      <p>URL: {blog.url}</p>
-      <p>Votes: {totalVotes}</p>
-
-      <div>
-        {user ? (
-          <>
+    <div className="pageContainer">
+      <h1 className={styles.blogHeader}>
+        {" "}
+        <a href={blog.url} target="_blank" rel="noreferrer">
+          {blog.title}
+        </a>{" "}
+        ({shortURL(blog.url)})
+      </h1>
+      <div className={styles.postDetails}>
+        <p>
+          {" "}
+          {totalVotes} {totalVotes === 1 ? "vote. " : "votes. "} Posted on:{" "}
+          {createLocalDate(blog.createdAt)} by:{" "}
+          <Link to={`/users/${blog.user.id}`}>{blog.user.username}</Link>{" "}
+        </p>
+        {user && (
+          <div className={styles.voteButtons}>
+            {" "}
             <button
               className="voteArrow"
               onClick={() => handleVote(1)}
               disabled={userVote === 1}
+              aria-label="Upvote"
             >
               &#11014;
             </button>
@@ -171,40 +166,50 @@ const Blog = () => {
               className="voteArrow"
               onClick={() => handleVote(-1)}
               disabled={userVote === -1}
+              aria-label="Downvote"
             >
               &#11015;
             </button>
-
+          </div>
+        )}
+        {!user && (
+          <p className={styles.loginPrompt}>
+            (<Link to="/login">Log in</Link> to vote and comment!)
+          </p>
+        )}
+      </div>
+      <div>
+        {user && (
+          <>
             <div>
-              <p>Posted by {blog.user.username}</p>
               {user.id === blog.user.id && (
                 <button
                   className="deleteButton"
                   onClick={() => deleteBlogMutation.mutate([blog.id])}
+                  aria-label="Delete blog"
                 >
                   &#128465;
                 </button>
               )}
             </div>
           </>
-        ) : (
-          <p>
-            (<Link to="/login">Log in</Link> to vote on posts!)
-          </p>
         )}
       </div>
 
       {user && (
-        <>
+        <div className={styles.commentContainer}>
           <form onSubmit={handleAddComment}>
             <label>Add a comment</label>
-            <input
+            <textarea
+              className={styles.commentTextArea}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
-            <button type="submit">Add Comment</button>
+            <button className="secondaryButton" type="submit">
+              Add Comment
+            </button>
           </form>{" "}
-        </>
+        </div>
       )}
       <h3>Comments</h3>
       {(!blog.comments || blog.comments.length === 0) && (
@@ -219,7 +224,7 @@ const Blog = () => {
               <Link to={`/users/${comment.user.id}`}>
                 {comment.user.username}
               </Link>{" "}
-              on {createUTCDate(comment.createdAt)}{" "}
+              on {createLocalDate(comment.createdAt)}{" "}
             </p>
 
             {user && comment.user.id === user?.id && (
@@ -228,6 +233,7 @@ const Blog = () => {
                   deleteCommentMutation.mutate([blog.id, comment.id])
                 }
                 className="deleteButton"
+                aria-label="Delete comment"
               >
                 &#128465;
               </button>

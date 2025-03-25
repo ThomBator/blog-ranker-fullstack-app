@@ -5,9 +5,6 @@ import styles from "../styles/Toggleable.module.css";
 const Toggleable = forwardRef((props, refs) => {
   const [visible, setVisible] = useState(false);
 
-  const hideWhenVisible = { display: visible ? "none" : "" };
-  const showWhenVisible = { display: visible ? "" : "none" };
-
   const toggleVisibility = () => {
     setVisible(!visible);
   };
@@ -20,7 +17,7 @@ const Toggleable = forwardRef((props, refs) => {
 
   return (
     <div className={styles.toggleableContainer}>
-      <div style={hideWhenVisible}>
+      <div className={visible ? styles.hidden : ""}>
         <button
           className={`${styles.shareButtonStyle} primaryButton`}
           onClick={toggleVisibility}
@@ -28,13 +25,17 @@ const Toggleable = forwardRef((props, refs) => {
           {props.buttonLabel}
         </button>
       </div>
-      <div style={showWhenVisible}>
+      <div
+        className={`${styles.content} ${
+          visible ? styles.visible : styles.hidden
+        }`}
+      >
         {props.children}
         <button
           className={`${styles.cancelButtonStyle}`}
           onClick={toggleVisibility}
         >
-          close
+          collapse form
         </button>
       </div>
     </div>

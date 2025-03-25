@@ -12,6 +12,12 @@
   gap: var(--gap-1);
 }
 
+@media screen and (max-width: 768px) {
+  .linkInfo {
+    flex-direction: column;
+  }
+}
+
 .linkInfo > * {
   margin-bottom: var(--margin-0);
 }

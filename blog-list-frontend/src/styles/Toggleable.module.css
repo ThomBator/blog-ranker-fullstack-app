@@ -1,10 +1,40 @@
+.toggleableContainer {
+  margin-bottom: var(--margin-5);
+}
+
+.content {
+  background: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Set the container as a positioning context */
+  padding: 20px; /* Optional: Add padding for spacing */
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-20px); /* Start slightly above */
+  transition: max-height 0.5s ease, opacity 0.5s ease, transform 0.3s ease;
+  box-shadow: var(--box-shadow-small);
+}
+
+.content.visible {
+  max-height: 500px; /* Adjust based on your content's height */
+  opacity: 1;
+  transform: translateY(0); /* Reset to original position */
+}
+
+.content.hidden {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-20px); /* Move upward as it collapses */
+}
+
 .cancelButtonStyle {
+  background: transparent;
+  border: none;
+  color: var(--lightest-color);
   font-size: var(--font-xs);
   font-weight: var(--font-semi-bold);
-  background: #fff;
-  border: none;
   text-decoration: underline;
-  margin-bottom: var(--margin-5);
+  margin-block: var(--margin-2);
 }
 
 .shareButtonStyle {
@@ -12,8 +42,4 @@
   margin-bottom: 2rem;
   padding-block: var(--padding-2);
   padding-inline: var(--padding-3);
-}
-
-.toggleableContainer {
-  margin-bottom: var(--margin-5);
 }

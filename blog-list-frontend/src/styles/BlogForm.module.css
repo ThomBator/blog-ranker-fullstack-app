@@ -1,16 +1,25 @@
 .blogFormContainer {
   background: var(--primary-color);
-  box-shadow: var(--box-shadow-small);
   display: flex;
+  flex: 1, 1, 0;
   justify-content: center;
   padding: var(--padding-5);
 }
 
 .blogForm {
   background: #fff;
+  box-shadow: var(--box-shadow-medium);
   padding: var(--padding-5);
-  box-shadow: var(--box-shadow-small);
   width: 50%;
+}
+
+@media screen and (max-width: 768px) {
+  .blogFormContainer {
+    padding: var(--padding-1);
+  }
+  .blogForm {
+    width: 100%;
+  }
 }
 
 .buttonStyle {
@@ -24,11 +33,10 @@
 .formElement {
   display: flex;
   flex-direction: column;
-  margin-bottom: var(--margin-2);
 }
 
 .formElement > input {
-  width: 10rem;
+  width: 100%%;
 }
 
 .formElement > label {
@@ -39,4 +47,11 @@
 .formRow {
   display: flex;
   gap: var(--gap-3);
+  margin-bottom: var(--margin-2);
+}
+
+@media screen and (max-width: 768px) {
+  .formRow {
+    flex-direction: column;
+  }
 }

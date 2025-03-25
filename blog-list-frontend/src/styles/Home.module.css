@@ -1,15 +1,10 @@
-.homeContainer {
-  margin: auto;
-  padding: 1rem;
-  width: 80%;
-}
-
 .listItem {
-  margin-bottom: 0.7rem;
+  margin-bottom: var(--margin-3);
 }
 
 .loginPrompt {
-  margin-bottom: 2rem;
+  font-size: var(--font-xs);
+  margin-bottom: var(--margin-5);
   margin-top: -1rem;
 }
 

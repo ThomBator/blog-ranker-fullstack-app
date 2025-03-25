@@ -7,6 +7,7 @@ import BlogForm from "./BlogForm";
 import BlogLink from "./BlogLink";
 import Toggleable from "./Toggleable";
 import { useUser } from "../contexts/userContext";
+import Notification from "./Notifications";
 
 const Home = () => {
   const user = useUser();
@@ -24,7 +25,7 @@ const Home = () => {
   const byLikes = (b1, b2) => b2.likes - b1.likes;
 
   return (
-    <div className={styles.homeContainer}>
+    <div className="pageContainer">
       <header className={styles.homeHeader}>
         <div className={styles.headerText}>
           <h1>Story Ranker</h1>
@@ -33,8 +34,8 @@ const Home = () => {
             posts you love to help them climb the rankings!
           </p>
           {!user && (
-            <p>
-              <Link to="/login">Log in</Link> to post, vote and comment.
+            <p className={styles.loginPrompt}>
+              (<Link to="/login">Log in</Link> to post, vote and comment.)
             </p>
           )}
         </div>
@@ -51,12 +52,15 @@ const Home = () => {
         </div>
       )}
 
-      {blogs &&
-        blogs.sort(byLikes).map((blog) => (
-          <div className={styles.listItem} key={blog.id}>
-            <BlogLink blog={blog} />
-          </div>
-        ))}
+      <main>
+        <Notification />
+        {blogs &&
+          blogs.sort(byLikes).map((blog) => (
+            <div className={styles.listItem} key={blog.id}>
+              <BlogLink blog={blog} />
+            </div>
+          ))}
+      </main>
     </div>
   );
 };

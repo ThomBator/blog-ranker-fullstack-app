@@ -49,7 +49,7 @@ const DesktopNav = () => {
                 className={`${styles.loginLogoutButton} secondaryButton`}
                 type="button"
               >
-                Login to post, vote & comment
+                Login
               </button>
             </Link>
           </nav>

@@ -54,9 +54,9 @@
   --font-bold: 700;
 
   /* Box shadow variables */
-  --box-shadow-small: 0 2px 4px var(--medium-color, rgba(0, 0, 0, 0.1));
-  --box-shadow-medium: 0 4px 8px var(--medium-color, rgba(0, 0, 0, 0.2));
-  --box-shadow-large: 0 8px 16px var(--medium-color, rgba(0, 0, 0, 0.3));
+  --box-shadow-small: 2px 2px 4px var(--dark-color);
+  --box-shadow-medium: 4px 4px 8px var(--dark-color);
+  --box-shadow-large: 8px 8px 16px var(--dark-color);
 
   /* Flexbox gap variables*/
   --gap-0: 0rem;

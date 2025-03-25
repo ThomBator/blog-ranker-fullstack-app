@@ -1,12 +1,11 @@
 import { React, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import styles from "../styles/BlogLink.module.css";
 import { useUser } from "../contexts/userContext";
 import { useMutation, useQueryClient } from "react-query";
 import blogService from "../services/blogs";
 import { useNotificationDispatch } from "../contexts/notificationContext";
-import Notification from "./Notifications";
 
 const BlogLink = ({ blog }) => {
   console.log("Blog in blogLink:", blog);
@@ -15,8 +14,8 @@ const BlogLink = ({ blog }) => {
   const [userVote, setUserVote] = useState(0);
   const queryClient = useQueryClient();
   const notifyWith = useNotificationDispatch();
-
-  // Extract votes from the context using the blog ID
+  const location = useLocation();
+  const isUserPage = location.pathname.includes("/users");
 
   const shortURL = (() => {
     try {
@@ -84,18 +83,25 @@ const BlogLink = ({ blog }) => {
   return (
     <div className={styles.blogLinkContainer}>
       <div className={styles.linkInfo}>
-        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-        <p>({shortURL})</p>
+        <a href={blog.url} target="_blank" rel="noreferrer">
+          {blog.title}
+        </a>
+
+        <p className={styles.blogDomain}>({shortURL})</p>
       </div>
+      <Link to={`/blogs/${blog.id}`}>Comments</Link>
 
       <div className={styles.voteInfo}>
-        <p>Votes: {totalVotes}</p>
+        <p>
+          {totalVotes === 1 ? "Vote: " : "Votes: "} {totalVotes}
+        </p>
         {user ? (
           <>
             <button
               className="voteArrow"
               onClick={() => handleVote(1)}
               disabled={userVote === 1}
+              aria-label="Upvote"
             >
               &#11014;
             </button>
@@ -103,6 +109,7 @@ const BlogLink = ({ blog }) => {
               className="voteArrow"
               onClick={() => handleVote(-1)}
               disabled={userVote === -1}
+              aria-label="Downvote"
             >
               &#11015;
             </button>
@@ -115,17 +122,24 @@ const BlogLink = ({ blog }) => {
       </div>
 
       <div className={styles.userInfo}>
-        <p>Posted by {blog.user.username}</p>
+        {!isUserPage && (
+          <p>
+            {" "}
+            Posted by{" "}
+            <Link to={`/users/${blog.user.id}`}>{blog.user.username}</Link>
+          </p>
+        )}
+
         {user && user.id === blog.user.id && (
           <button
             className="deleteButton"
             onClick={() => deleteBlogMutation.mutate([blog.id])}
+            aria-label="Delete blog"
           >
             &#128465;
           </button>
         )}
       </div>
-      <Notification />
     </div>
   );
 };

@@ -17,6 +17,20 @@ const BlogForm = () => {
 
   const create = blogService.create;
 
+  //basic url sanitization to avoid malicious query params
+  const sanitizeURL = (url) => {
+    try {
+      const parsedURL = new URL(url);
+
+      parsedURL.search = "";
+
+      setUrl(parsedURL);
+    } catch (error) {
+      console.error("Invalid URL: ", error);
+      setUrl("");
+    }
+  };
+
   const newBlogMutation = useMutation(([blog, token]) => create(blog, token), {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["blogs"] });
@@ -66,7 +80,7 @@ const BlogForm = () => {
               name="url"
               value={url}
               type="url"
-              onChange={(event) => setUrl(event.target.value)}
+              onChange={(event) => sanitizeURL(event.target.value)}
             />
           </div>
         </div>
