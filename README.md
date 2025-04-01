@@ -47,6 +47,20 @@ cd blog-ranker-fullstack-app
 npm install
 ```
 
+### Database Setup
+
+Before running the app, ensure you have a local instance of MongoDB running. You will also need to create a `.env` file in the root directory with the following environment variables:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+SECRET=your_jwt_secret
+PORT=3001
+```
+
+Replace `your_mongodb_connection_string` with your actual local MongoDB URI, and `your_jwt_secret` with a secure secret key.
+
+
+
 ### Usage
 
 1. Start the backend server from within ./blog-list-backend:
