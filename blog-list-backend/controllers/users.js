@@ -30,6 +30,8 @@ usersRouter.post("/", async (request, response) => {
       .json({ error: "Username already exists. Please choose another." });
   }
 
+  //saltRounds ensures that the password is hashed securely
+  //The higher the number, the more secure, but also more time-consuming
   const saltRounds = 10;
   const passwordHash = await bycrypt.hash(password, saltRounds);
 
@@ -45,6 +47,10 @@ usersRouter.post("/", async (request, response) => {
     id: user._id,
   };
 
+  //signing the token with the user's username and id
+  //The token is signed with the secret key stored in the environment variable SECRET
+  //The token expires in 1 hour
+  //The token is used to authenticate the user in subsequent requests
   const token = jwt.sign(userForToken, process.env.SECRET, {
     expiresIn: 60 * 60,
   });

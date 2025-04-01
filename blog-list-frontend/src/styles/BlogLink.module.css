@@ -2,6 +2,7 @@
   background: var(--lightest-color);
   padding-block: var(--padding-2);
   padding-inline: var(--padding-3);
+  z-index: 100;
 }
 
 .linkInfo,

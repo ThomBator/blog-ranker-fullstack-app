@@ -4,6 +4,12 @@ const Comment = require("../models/comments");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 
+// Middleware to extract token from request
+// This function checks the request headers for a Bearer token and returns it
+//Token is reformatted to remove the "Bearer " prefix
+/// This token is used for authentication and authorization
+// It allows us to verify the user's identity and permissions when making requests
+// to protected routes, such as creating or deleting a blog post
 const getTokenFrom = (request) => {
   const authorization = request.get("authorization");
 
@@ -146,7 +152,7 @@ blogRouter.put("/:id", async (request, response) => {
     votes: body.votes,
   };
 
-  //new: true ensures you get the updated post, not the pre-updated version returned
+  //The "new: true" property ensures you get the updated post, not the pre-updated version returned
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
     new: true,
   });

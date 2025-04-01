@@ -40,7 +40,10 @@ const Home = () => {
           )}
         </div>
         <div className={styles.headerImgContainer}>
-          <img src="storyRankerHeroV4.webp" />
+          <img
+            alt="A cartoon image of anthropomorphic books standing on a podium"
+            src="storyRankerHeroV4.webp"
+          />
         </div>
       </header>
 

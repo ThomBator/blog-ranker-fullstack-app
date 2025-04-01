@@ -14,7 +14,7 @@ const Blog = () => {
   const queryClient = useQueryClient();
   const user = useUser();
   const [totalVotes, setTotalVotes] = useState(0);
-  const [userVote] = useState(0);
+  const [userVote, setUserVote] = useState(0);
   const [comment, setComment] = useState("");
   const [hasBeenDeleted, setHasBeenDeleted] = useState(false);
   const notifyWith = useNotificationDispatch();
@@ -103,10 +103,14 @@ const Blog = () => {
 
   useEffect(() => {
     if (blog?.votes?.users) {
-      const initialVotes = blog.votes.users.reduce(
-        (total, vote) => total + vote.vote,
-        0
-      );
+      const initialVotes = blog.votes.users.reduce((total, voteUser) => {
+        if (user) {
+          if (voteUser.id === user.id) {
+            setUserVote(voteUser.vote);
+          }
+        }
+        return total + voteUser.vote;
+      }, 0);
 
       const votesForDisplay = initialVotes > 0 ? initialVotes : 0;
 
@@ -212,9 +216,12 @@ const Blog = () => {
         </div>
       )}
       <h3>Comments</h3>
-      {(!blog.comments || blog.comments.length === 0) && (
-        <p>No comments yet. Please add one!</p>
-      )}
+      {(!blog.comments || blog.comments.length === 0) &&
+        (user ? (
+          <p>No comments yet. Please add one!</p>
+        ) : (
+          <p>No comments yet. Log in to add one!</p>
+        ))}
       <ul>
         {blog.comments.map((comment) => (
           <li key={comment.id}>

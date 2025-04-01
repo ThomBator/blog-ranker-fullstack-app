@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 
+// This is a Mongoose schema for users in a blog application
+// It defines the structure of the user document in the MongoDB database
+// The schema includes fields for the username, password hash, and references to blogs and comments
+// It also includes validation for the username to ensure it is unique and has a minimum length
+// The schema uses the uniqueValidator plugin to enforce uniqueness on the username field
 const userSchema = mongoose.Schema({
   username: {
     type: String,
@@ -25,6 +30,8 @@ userSchema.set("toJSON", {
       returnedObject.id = returnedObject._id.toString();
       delete returnedObject._id;
     }
+    //We remove the __v property because it is not needed in the JSON response
+    //We also remove the passwordHash property for security reasons
     delete returnedObject.__v;
     delete returnedObject.passwordHash;
   },

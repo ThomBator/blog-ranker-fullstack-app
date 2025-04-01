@@ -69,10 +69,15 @@ const BlogLink = ({ blog }) => {
 
   useEffect(() => {
     if (blog?.votes?.users) {
-      const initialVotes = blog.votes.users.reduce(
-        (total, vote) => total + vote.vote,
-        0
-      );
+      const initialVotes = blog.votes.users.reduce((total, voteUser) => {
+        if (user) {
+          if (voteUser.id === user.id) {
+            setUserVote(voteUser.vote);
+          }
+        }
+
+        return total + voteUser.vote;
+      }, 0);
 
       const votesForDisplay = initialVotes > 0 ? initialVotes : 0;
 
@@ -89,7 +94,7 @@ const BlogLink = ({ blog }) => {
 
         <p className={styles.blogDomain}>({shortURL})</p>
       </div>
-      <Link to={`/blogs/${blog.id}`}>Comments</Link>
+      <Link to={`/blogs/${blog.id}`}>View Comments</Link>
 
       <div className={styles.voteInfo}>
         <p>

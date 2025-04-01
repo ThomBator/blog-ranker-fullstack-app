@@ -4,15 +4,16 @@
 
 .content {
   background: var(--primary-color);
+  box-shadow: var(--box-shadow-small);
   display: flex;
   flex-direction: column;
   position: relative; /* Set the container as a positioning context */
   padding: 20px; /* Optional: Add padding for spacing */
   max-height: 0;
   opacity: 0;
+
   transform: translateY(-20px); /* Start slightly above */
   transition: max-height 0.5s ease, opacity 0.5s ease, transform 0.3s ease;
-  box-shadow: var(--box-shadow-small);
 }
 
 .content.visible {
@@ -24,6 +25,7 @@
 .content.hidden {
   max-height: 0;
   opacity: 0;
+  pointer-events: none;
   transform: translateY(-20px); /* Move upward as it collapses */
 }
 

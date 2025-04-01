@@ -9,14 +9,19 @@ const loginRouter = require("./controllers/login");
 const middleware = require("./utils/middleware");
 const logger = require("./utils/logger");
 
+//We will use a unique route for testing purposes
+//This will be used to reset the database before each test
+//The database is then populated with test data
+//This is a good practice to ensure that the tests are not affected by previous test runs
 if (process.env.NODE_ENV === "test") {
   const testingRouter = require("./controllers/testing");
   app.use("/api/testing", testingRouter);
 }
 
 const mongoose = require("mongoose");
-//strictQuery prevents from writing fields that are not defined in schema
-//I think generally it is best to leave it as default true but I guess the course designers want it off for some reason.
+// Disable strict query mode to allow query filters with fields not explicitly defined in the schema.
+// This is useful for flexibility during development but can be enabled for stricter validation in production.
+// For more details, see: https://mongoosejs.com/docs/migrating_to_6.html#strictQuery
 mongoose.set("strictQuery", false);
 const PORT = process.env.PORT || 3003;
 
