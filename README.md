@@ -3,7 +3,7 @@
 A full-stack, "Hacker News" inspired application that enables users to share, like, and comment on blog posts.
 
 ## Technologies Used
-- **Frontend:** React, React Query, CSS Modules
+- **Frontend:** React, React Router, React Query, CSS Modules
 - **Backend:** Node.js, Express.js
 - **Database:** MongoDB with Mongoose
 - **Authentication:** JWT Tokens
