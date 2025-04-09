@@ -8,7 +8,6 @@ import Users from "./components/Users";
 import DesktopNav from "./components/DesktopNav";
 import MobileNav from "./components/MobileNav";
 import Footer from "./components/Footer";
-
 import User from "./components/User";
 import { Routes, Route } from "react-router-dom";
 import { useInitUser } from "./contexts/userContext";
