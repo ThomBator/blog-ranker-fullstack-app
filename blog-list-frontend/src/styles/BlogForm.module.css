@@ -36,7 +36,7 @@
 }
 
 .formElement > input {
-  width: 100%%;
+  width: 100%;
 }
 
 .formElement > label {
@@ -50,8 +50,9 @@
   margin-bottom: var(--margin-2);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1500px) {
   .formRow {
     flex-direction: column;
+    gap: var(--gap-2);
   }
 }

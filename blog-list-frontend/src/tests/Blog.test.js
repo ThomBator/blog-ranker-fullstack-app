@@ -218,4 +218,84 @@ describe("Blog component", () => {
     // Also optionally check that the link is present:
     expect(screen.getByRole("link", { name: /log in/i })).toBeInTheDocument();
   });
+
+  it("allows user to delete blog post they created", async () => {
+    const updatedBlog = {
+      ...mockBlog,
+      user: { username: "Thomas", id: "1" }, // same as mockUser
+    };
+
+    blogService.getOne.mockResolvedValueOnce(updatedBlog);
+    blogService.remove.mockResolvedValueOnce({});
+
+    render(<Blog />, { wrapper: Wrapper });
+
+    const deleteButton = await screen.findByRole("button", {
+      name: /delete blog/i,
+    });
+    expect(deleteButton).toBeInTheDocument();
+
+    fireEvent.click(deleteButton);
+
+    await waitFor(() => {
+      expect(blogService.remove).toHaveBeenCalledWith(updatedBlog.id);
+      expect(
+        screen.getByText(/This Blog post has been deleted successfully/i)
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("does not show delete blog button for other users", async () => {
+    const updatedBlog = {
+      ...mockBlog,
+      user: { username: "OtherUser", id: "999" },
+    };
+
+    blogService.getOne.mockResolvedValueOnce(updatedBlog);
+
+    render(<Blog />, { wrapper: Wrapper });
+
+    await waitFor(() => {
+      expect(screen.queryByRole("button", { name: /delete blog/i })).toBeNull();
+    });
+  });
+
+  it("does not show delete blog button for other users", async () => {
+    const updatedBlog = {
+      ...mockBlog,
+      user: { username: "OtherUser", id: "999" },
+    };
+
+    blogService.getOne.mockResolvedValueOnce(updatedBlog);
+
+    render(<Blog />, { wrapper: Wrapper });
+
+    await waitFor(() => {
+      expect(screen.queryByRole("button", { name: /delete blog/i })).toBeNull();
+    });
+  });
+
+  it("does not show delete comment button for other users' comments", async () => {
+    const updatedBlog = {
+      ...mockBlog,
+      comments: [
+        {
+          id: "xyz789",
+          comment: "Another comment",
+          createdAt: "2025-02-17T19:09:37.835Z",
+          user: { username: "OtherUser", id: "999" },
+        },
+      ],
+    };
+
+    blogService.getOne.mockResolvedValueOnce(updatedBlog);
+
+    render(<Blog />, { wrapper: Wrapper });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByRole("button", { name: /delete comment/i })
+      ).toBeNull();
+    });
+  });
 });
