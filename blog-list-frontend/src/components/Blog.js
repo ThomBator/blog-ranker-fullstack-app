@@ -3,7 +3,6 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useUser } from "../contexts/userContext";
 import { useNotificationDispatch } from "../contexts/notificationContext";
-import Notification from "./Notifications";
 import blogService from "../services/blogs";
 import styles from "../styles/Blog.module.css";
 import createLocalDate from "../utils/createLocalDate";
@@ -46,7 +45,7 @@ const Blog = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["blogs"]); // Re-fetch blog data
       setHasBeenDeleted(true);
-      notifyWith("Your blog has been successfully deleted");
+      notifyWith("Your blog has been successfully deleted", "green");
     },
     onError: (error) => {
       console.error("Error updating blog:", error);
@@ -58,7 +57,7 @@ const Blog = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["blogs"]); // Re-fetch blog data
-        notifyWith("Your comment has been successfully deleted");
+        notifyWith("Your comment has been successfully deleted", "green");
       },
       onError: (error) => {
         console.error("Error updating blog:", error);
@@ -249,7 +248,6 @@ const Blog = () => {
           </li>
         ))}
       </ul>
-      <Notification />
     </div>
   );
 };

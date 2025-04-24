@@ -30,9 +30,12 @@ const SignUpForm = () => {
           username: username.value,
           password: password.value,
         });
-        notifyWith("Login Successful");
+        notifyWith("Sign Up Successful", "green");
       } catch (error) {
-        notifyWith("An error occurred. Please contact the site administrator.");
+        notifyWith(
+          "A user already exists with your inputted username, please try again",
+          "red"
+        );
       }
     }
   };

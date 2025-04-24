@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../styles/DesktopNav.module.css";
 import { Link } from "react-router-dom";
 import { useUser, useLogout } from "../contexts/userContext";
-
+import Notification from "./Notifications";
 const DesktopNav = () => {
   const user = useUser();
   const logout = useLogout();
@@ -55,6 +55,7 @@ const DesktopNav = () => {
           </nav>
         )}
       </div>
+      <Notification />
     </div>
   );
 };

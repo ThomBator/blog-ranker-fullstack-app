@@ -17,7 +17,7 @@ const Notification = () => {
         border: `2px solid ${color}`,
         color: color,
         borderRadius: "10px",
-        paddingLeft: "1rem",
+        padding: "1rem",
         backgroundColor: "lightgray",
       }}
     >

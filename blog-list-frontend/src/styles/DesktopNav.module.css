@@ -9,6 +9,8 @@
     align-items: center;
     display: flex;
     justify-content: space-between;
+
+    top: 0;
   }
 
   .navElement:last-child {
@@ -19,6 +21,9 @@
 .desktopNavBackground {
   background: var(--primary-color);
   box-shadow: var(--box-shadow-small);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .navContainer {

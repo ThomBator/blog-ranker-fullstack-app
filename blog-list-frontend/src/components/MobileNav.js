@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useUser, useLogout } from "../contexts/userContext";
 import { push as Menu } from "react-burger-menu";
 import hamburgerStyles from "../styles/hamburgerStyles";
+import Notification from "./Notifications";
 const MobileNav = () => {
   const user = useUser();
   const logout = useLogout();
@@ -37,6 +38,9 @@ const MobileNav = () => {
           </nav>
         </div>
       </Menu>
+      <div className={styles.mobileNavNotification}>
+        <Notification />
+      </div>
     </div>
   );
 };

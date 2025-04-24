@@ -26,9 +26,9 @@ const LoginForm = () => {
         username: username.value,
         password: password.value,
       });
-      notifyWith("Login Successful");
+      notifyWith("Login Successful!", "green");
     } catch (error) {
-      notifyWith("Error. Invalid credentials");
+      notifyWith("Error. Invalid username or password.", "red");
     }
   };
 
@@ -38,7 +38,6 @@ const LoginForm = () => {
 
   return (
     <div className={styles.loginContainer}>
-      <h1>Welcome to Story Ranker</h1>
       <form className={styles.loginForm} onSubmit={handleSubmit}>
         <div className={styles.loginPrompt}>
           <h2>Sign in</h2>

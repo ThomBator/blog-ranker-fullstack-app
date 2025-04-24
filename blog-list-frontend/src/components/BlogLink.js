@@ -42,10 +42,14 @@ const BlogLink = ({ blog }) => {
   const deleteBlogMutation = useMutation(([id]) => blogService.remove(id), {
     onSuccess: () => {
       queryClient.invalidateQueries(["blogs"]); // Re-fetch blog data
-      notifyWith("Your blog has been deleted successfully.");
+      notifyWith("Your blog has been deleted successfully.", "green");
     },
     onError: (error) => {
       console.error("Error updating blog:", error);
+      notifyWith(
+        "There has been an error updating your post. Please try again.",
+        "red"
+      );
     },
   });
 

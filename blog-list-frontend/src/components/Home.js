@@ -7,7 +7,6 @@ import BlogForm from "./BlogForm";
 import BlogLink from "./BlogLink";
 import Toggleable from "./Toggleable";
 import { useUser } from "../contexts/userContext";
-import Notification from "./Notifications";
 
 const Home = () => {
   const user = useUser();
@@ -56,7 +55,6 @@ const Home = () => {
       )}
 
       <main>
-        <Notification />
         {blogs &&
           blogs.sort(byLikes).map((blog) => (
             <div className={styles.listItem} key={blog.id}>

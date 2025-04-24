@@ -23,10 +23,10 @@ const BlogForm = () => {
       setTitle("");
       setAuthor("");
       setUrl("");
-      notifyWith("New Blog Successfully Added");
+      notifyWith("New Blog Successfully Added", "green");
     },
     onError: () => {
-      notifyWith("Adding blog failed");
+      notifyWith("Adding blog failed", "red");
       logout();
     },
   });
@@ -70,6 +70,7 @@ const BlogForm = () => {
             />
           </div>
         </div>
+
         <div>
           <div>
             <button

@@ -1,18 +1,12 @@
 import React from "react";
 import { createContext, useReducer, useContext } from "react";
 import PropTypes from "prop-types";
-/*
-Additional actions you might consider adding: 
-  CREATED
-  INVALID_CREDENTIALS
-  LOGIN_SUCCESS
-*/
 
 const emptyNotification = { message: null };
 
 const notificationReducer = (state, action) => {
   if (action.type === "SET") {
-    return { message: action.message };
+    return { message: action.message, color: action.color };
   }
   if (action.type === "CLEAR") {
     return emptyNotification;
@@ -61,8 +55,8 @@ export const useNotificationDispatch = () => {
     );
   }
 
-  return (message) => {
-    dispatch({ message, type: "SET" });
+  return (message, color) => {
+    dispatch({ message, color, type: "SET" });
     setTimeout(() => {
       dispatch({ type: "CLEAR" });
     }, 5000);

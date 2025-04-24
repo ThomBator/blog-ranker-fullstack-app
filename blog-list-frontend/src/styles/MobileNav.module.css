@@ -15,7 +15,8 @@
   box-shadow: var(--box-shadow-small);
   min-height: 5rem;
   padding: 1rem;
-  position: relative;
+  position: sticky;
+  top: 0;
 }
 
 .navContainer {
@@ -46,4 +47,13 @@
 
   padding-block: var(--padding-1);
   padding-inline: var(--padding-3);
+}
+
+.mobileNavNotification {
+  width: 100%;
+  bottom: -3rem;
+  left: 0;
+  margin-inline: auto;
+
+  position: absolute;
 }
