@@ -1,10 +1,15 @@
-import React from "react";
-import { createContext, useReducer, useContext } from "react";
+import React, {
+  createContext,
+  useReducer,
+  useContext,
+  useEffect, // Import useEffect
+} from "react";
 import PropTypes from "prop-types";
 import loginService from "../services/login";
 import userService from "../services/users";
 import storageService from "../services/storage";
-import checkIfTokenIsExpired from "../services/token";
+// Corrected the import for checkIfTokenIsExpired
+import { checkIfTokenIsExpired } from "../services/token";
 
 //The reducer is structured to update state based on specified actions.
 const loginReducer = (state, action) => {
@@ -26,6 +31,25 @@ const UserContext = createContext();
 export const UserContextProvider = ({ children }) => {
   const [user, userDispatch] = useReducer(loginReducer, null);
 
+  // Effect to load user from storage and check token validity on initial mount
+  useEffect(() => {
+    const loggedUserJSON = storageService.loadUser();
+    if (loggedUserJSON) {
+      const isTokenExpired = checkIfTokenIsExpired(loggedUserJSON.token);
+      if (isTokenExpired) {
+        // If token is expired, clear it
+        userDispatch({ type: "CLEAR" });
+        storageService.removeUser();
+      } else {
+        // If token is valid, set the user
+        userDispatch({ type: "SET", payload: loggedUserJSON });
+      }
+    } else {
+      // Ensure user state is null if nothing in storage
+      userDispatch({ type: "CLEAR" });
+    }
+  }, []); // Empty dependency array ensures this runs only once on mount
+
   return (
     <UserContext.Provider value={[user, userDispatch]}>
       {/*The UserContex component created above is used here to wrap all child components in the context*/}
@@ -36,20 +60,27 @@ export const UserContextProvider = ({ children }) => {
 
 //allows a component to use a user if that state is held in the UserContext
 export const useUser = () => {
-  const [user, dispatch] = useContext(UserContext);
-
-  if (user) {
-    const isTokenExpired = checkIfTokenIsExpired(user.token);
-
-    if (isTokenExpired) {
-      dispatch({
-        type: "CLEAR",
-      });
-      storageService.removeUser();
-      return null;
-    }
+  const context = useContext(UserContext);
+  if (context === undefined) {
+    throw new Error("useUser must be used within a UserContextProvider");
   }
+  const [user, dispatch] = context;
 
+  // Use useEffect to check token expiration after initial render/state setup
+  useEffect(() => {
+    if (user && user.token) {
+      const isTokenExpired = checkIfTokenIsExpired(user.token);
+      if (isTokenExpired) {
+        // Dispatch clear action only if token is found to be expired
+        dispatch({ type: "CLEAR" });
+        storageService.removeUser();
+      }
+    }
+    // Dependency array includes user object to re-run check if user changes
+  }, [user, dispatch]);
+
+  // Return the current user state
+  // The effect will handle clearing it if the token is expired
   return user;
 };
 

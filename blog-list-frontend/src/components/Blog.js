@@ -12,7 +12,6 @@ const Blog = () => {
   const id = useParams().id;
   const queryClient = useQueryClient();
   const user = useUser();
-  console.log(user);
   const [totalVotes, setTotalVotes] = useState(0);
   const [userVote, setUserVote] = useState(0);
   const [comment, setComment] = useState("");
@@ -136,8 +135,6 @@ const Blog = () => {
       </div>
     );
   }
-
-  console.log(blog);
 
   return (
     <div className="pageContainer">

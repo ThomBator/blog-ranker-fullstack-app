@@ -20,6 +20,7 @@ const Notification = () => {
         padding: "1rem",
         backgroundColor: "lightgray",
       }}
+      role="alert"
     >
       {message}
     </p>

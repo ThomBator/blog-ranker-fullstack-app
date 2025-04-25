@@ -5,6 +5,8 @@ const helper = require("./test_helper");
 const api = supertest(app);
 const Blog = require("../models/blog");
 
+jest.setTimeout(30000); // Increase timeout for database operations
+
 beforeEach(async () => {
   await Blog.deleteMany({});
   await Blog.insertMany(helper.initialBlogs);
@@ -63,9 +65,62 @@ test("can update likes in blog post", async () => {
   await api.put(`/api/blog/${blogToUpdate.id}`).send(blogToUpdate);
   const getResponseAfter = await api.get("/api/blog");
   const blogAfterUpdate = getResponseAfter.body[0];
-  console.log("LIKES BEFORE UPDATE ", blogToUpdate.likes);
-  console.log("LIKES AFTER UPDATE ", blogAfterUpdate.likes);
+
   expect(blogAfterUpdate.likes).toEqual(blogToUpdate.likes);
+});
+
+// Test fetching a specific blog
+
+test("can fetch a specific blog", async () => {
+  const blogsAtStart = await helper.blogsInDb();
+  const blogToView = blogsAtStart[0];
+
+  const resultBlog = await api
+    .get(`/api/blogs/${blogToView.id}`)
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+
+  expect(resultBlog.body).toEqual(JSON.parse(JSON.stringify(blogToView)));
+});
+
+// Test adding a comment to a blog
+
+test("can add a comment to a blog", async () => {
+  const blogsAtStart = await helper.blogsInDb();
+  const blogToComment = blogsAtStart[0];
+
+  const newComment = { comment: "Great post!", user: { id: "testUserId" } };
+
+  const result = await api
+    .post(`/api/blogs/${blogToComment.id}/comments`)
+    .send(newComment)
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+
+  expect(result.body.comment).toBe("Great post!");
+});
+
+// Test deleting a comment from a blog
+
+test("can delete a comment from a blog", async () => {
+  const blogsAtStart = await helper.blogsInDb();
+  const blogToComment = blogsAtStart[0];
+
+  const newComment = { comment: "To be deleted", user: { id: "testUserId" } };
+  const commentResponse = await api
+    .post(`/api/blogs/${blogToComment.id}/comments`)
+    .send(newComment);
+
+  const commentId = commentResponse.body.id;
+
+  await api
+    .delete(`/api/blogs/${blogToComment.id}/comments/${commentId}`)
+    .expect(204);
+
+  const updatedBlog = await api.get(`/api/blogs/${blogToComment.id}`);
+  const comments = updatedBlog.body.comments.map((c) => c.id);
+
+  expect(comments).not.toContain(commentId);
 });
 
 afterAll(async () => {

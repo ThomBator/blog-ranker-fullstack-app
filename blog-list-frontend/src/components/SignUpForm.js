@@ -46,14 +46,9 @@ const SignUpForm = () => {
 
   return (
     <div className={styles.loginContainer}>
-      <h1>Sign up for Story Ranker</h1>
-      <p>
-        Create an account to post stories, leave comments and vote on other
-        users&apos; posts.
-      </p>
       <form className={styles.loginForm} onSubmit={handleSubmit}>
         <div className={styles.loginPrompt}>
-          <h2>Sign in</h2>
+          <h2>Sign up</h2>
         </div>
         <div className="formInput">
           <label htmlFor="username">Username</label>
@@ -61,24 +56,28 @@ const SignUpForm = () => {
         </div>
         <div className="formInput">
           <label htmlFor="password">Password</label>
-          <input id="password" placeholder="Password" {...password} />
+          <input
+            id="enterPassword"
+            placeholder="Enter Password"
+            {...password}
+          />
         </div>
         <div className="formInput">
-          <label htmlFor="reEnterPassword">Re-enter password</label>
+          <label htmlFor="confirmPassword">Confirm password</label>
           <input
-            id="reRenterPassword"
-            placeholder="Password"
+            id="confirmPassword"
+            placeholder="Confirm Password"
             {...reEnterPassword}
           />
         </div>
         <div>
-          <button id="login-button" type="submit">
+          <button id="login-button" className="secondaryButton" type="submit">
             Sign Up
           </button>
         </div>
-        <div className={styles.logoutPrompt}>
+        <div className={styles.signUpPrompt}>
           <p>
-            Already have an account? <Link to="/login">Login</Link>
+            Already have an account? <Link to="/login">Login.</Link>
           </p>
         </div>
       </form>

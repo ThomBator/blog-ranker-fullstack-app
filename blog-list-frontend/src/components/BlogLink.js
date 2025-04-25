@@ -8,7 +8,6 @@ import blogService from "../services/blogs";
 import { useNotificationDispatch } from "../contexts/notificationContext";
 
 const BlogLink = ({ blog }) => {
-  console.log("Blog in blogLink:", blog);
   const user = useUser();
   const [totalVotes, setTotalVotes] = useState(0);
   const [userVote, setUserVote] = useState(0);

@@ -1,8 +1,15 @@
 // src/tests/Blog.test.js
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom"; // <-- import so .toBeInTheDocument() etc. work
+import PropTypes from "prop-types";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
@@ -21,6 +28,10 @@ function Wrapper({ children }) {
     </QueryClientProvider>
   );
 }
+
+Wrapper.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 // ----- Our Blog component
 import Blog from "../components/Blog";
@@ -92,7 +103,9 @@ beforeEach(() => {
 
 describe("Blog component", () => {
   it("renders blog title and author", async () => {
-    render(<Blog />, { wrapper: Wrapper });
+    await act(async () => {
+      render(<Blog />, { wrapper: Wrapper });
+    });
 
     // The link containing 'Test'
     // This avoids the multiple element problem
@@ -104,7 +117,9 @@ describe("Blog component", () => {
   });
 
   it("shows upvote and downvote buttons for logged-in user", async () => {
-    render(<Blog />, { wrapper: Wrapper });
+    await act(async () => {
+      render(<Blog />, { wrapper: Wrapper });
+    });
 
     // They might not appear immediately if there's loading,
     // but let's assume the fetch is quick
@@ -118,7 +133,9 @@ describe("Blog component", () => {
 
   it("disables upvote button if user already voted up", async () => {
     // By default, user '1' has vote=1, so the upvote should be disabled
-    render(<Blog />, { wrapper: Wrapper });
+    await act(async () => {
+      render(<Blog />, { wrapper: Wrapper });
+    });
 
     const upvoteBtn = await screen.findByRole("button", { name: /Upvote/i });
     expect(upvoteBtn).toBeDisabled();
@@ -137,7 +154,9 @@ describe("Blog component", () => {
 
     blogService.getOne.mockResolvedValue(updatedBlog);
 
-    render(<Blog />, { wrapper: Wrapper });
+    await act(async () => {
+      render(<Blog />, { wrapper: Wrapper });
+    });
 
     const upvoteButton = await screen.findByRole("button", { name: /Upvote/i });
     const downvoteButton = screen.getByRole("button", { name: /Downvote/i });
@@ -162,10 +181,14 @@ describe("Blog component", () => {
 
     blogService.getOne.mockResolvedValue(updatedBlog);
 
-    render(<Blog />, { wrapper: Wrapper });
+    await act(async () => {
+      render(<Blog />, { wrapper: Wrapper });
+    });
 
     const upvoteButton = await screen.findByRole("button", { name: /Upvote/i });
-    const downvoteButton = screen.getByRole("button", { name: /Downvote/i });
+    const downvoteButton = await screen.findByRole("button", {
+      name: /Downvote/i,
+    });
 
     await waitFor(() => {
       expect(upvoteButton.disabled).toBe(false);
@@ -174,7 +197,9 @@ describe("Blog component", () => {
   });
 
   it("adds a comment when form is submitted", async () => {
-    render(<Blog />, { wrapper: Wrapper });
+    await act(async () => {
+      render(<Blog />, { wrapper: Wrapper });
+    });
 
     const textarea = screen.getByRole("textbox");
     const addCommentButton = screen.getByRole("button", {
@@ -197,7 +222,9 @@ describe("Blog component", () => {
     // Overwrite user mock so there's no user
     userContext.useUser.mockReturnValue(null);
 
-    render(<Blog />, { wrapper: Wrapper });
+    await act(async () => {
+      render(<Blog />, { wrapper: Wrapper });
+    });
 
     // Wait for the fetch to finish
     await waitFor(() => {
@@ -228,7 +255,9 @@ describe("Blog component", () => {
     blogService.getOne.mockResolvedValueOnce(updatedBlog);
     blogService.remove.mockResolvedValueOnce({});
 
-    render(<Blog />, { wrapper: Wrapper });
+    await act(async () => {
+      render(<Blog />, { wrapper: Wrapper });
+    });
 
     const deleteButton = await screen.findByRole("button", {
       name: /delete blog/i,
@@ -253,7 +282,9 @@ describe("Blog component", () => {
 
     blogService.getOne.mockResolvedValueOnce(updatedBlog);
 
-    render(<Blog />, { wrapper: Wrapper });
+    await act(async () => {
+      render(<Blog />, { wrapper: Wrapper });
+    });
 
     await waitFor(() => {
       expect(screen.queryByRole("button", { name: /delete blog/i })).toBeNull();
@@ -268,7 +299,9 @@ describe("Blog component", () => {
 
     blogService.getOne.mockResolvedValueOnce(updatedBlog);
 
-    render(<Blog />, { wrapper: Wrapper });
+    await act(async () => {
+      render(<Blog />, { wrapper: Wrapper });
+    });
 
     await waitFor(() => {
       expect(screen.queryByRole("button", { name: /delete blog/i })).toBeNull();
@@ -290,7 +323,9 @@ describe("Blog component", () => {
 
     blogService.getOne.mockResolvedValueOnce(updatedBlog);
 
-    render(<Blog />, { wrapper: Wrapper });
+    await act(async () => {
+      render(<Blog />, { wrapper: Wrapper });
+    });
 
     await waitFor(() => {
       expect(
