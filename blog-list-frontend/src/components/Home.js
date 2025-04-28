@@ -48,7 +48,7 @@ const Home = () => {
 
       {user && (
         <div>
-          <Toggleable buttonLabel="Share a new blog" ref={blogFormRef}>
+          <Toggleable buttonLabel="Share a post" ref={blogFormRef}>
             <BlogForm />
           </Toggleable>
         </div>

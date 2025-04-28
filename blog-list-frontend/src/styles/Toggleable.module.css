@@ -1,7 +1,3 @@
-.toggleableContainer {
-  margin-bottom: var(--margin-5);
-}
-
 .content {
   background: var(--primary-color);
   box-shadow: var(--box-shadow-small);
@@ -11,7 +7,6 @@
   padding: 20px; /* Optional: Add padding for spacing */
   max-height: 0;
   opacity: 0;
-
   transform: translateY(-20px); /* Start slightly above */
   transition: max-height 0.5s ease, opacity 0.5s ease, transform 0.3s ease;
 }
@@ -20,6 +15,7 @@
   max-height: 500px; /* Adjust based on your content's height */
   opacity: 1;
   transform: translateY(0); /* Reset to original position */
+  margin-block: var(--margin-5);
 }
 
 .content.hidden {
@@ -36,12 +32,11 @@
   font-size: var(--font-xs);
   font-weight: var(--font-semi-bold);
   text-decoration: underline;
-  margin-block: var(--margin-2);
 }
 
 .shareButtonStyle {
   font-size: var(--font-m);
-  margin-bottom: 2rem;
+
   padding-block: var(--padding-2);
   padding-inline: var(--padding-3);
 }

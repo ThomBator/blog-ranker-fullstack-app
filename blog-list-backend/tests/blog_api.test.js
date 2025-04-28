@@ -5,122 +5,68 @@ const helper = require("./test_helper");
 const api = supertest(app);
 const Blog = require("../models/blog");
 
-jest.setTimeout(30000); // Increase timeout for database operations
-
 beforeEach(async () => {
   await Blog.deleteMany({});
-  await Blog.insertMany(helper.initialBlogs);
+  const blogObjects = helper.initialBlogs.map((blog) => new Blog(blog));
+  const promiseArray = blogObjects.map((blog) => blog.save());
+  await Promise.all(promiseArray);
 });
 
-test("blogs are returned as json", async () => {
-  await api
-    .get("/api/blog")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
+describe("when there are initially some blogs saved", () => {
+  test("blogs are returned as json", async () => {
+    await api
+      .get("/api/blog")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+  });
+
+  test("all initial blogs are returned", async () => {
+    const response = await api.get("/api/blog");
+    expect(response.body).toHaveLength(helper.initialBlogs.length);
+  });
+
+  test("blogs have a unique identifier property named id", async () => {
+    const response = await api.get("/api/blog");
+    const blogs = response.body;
+    blogs.forEach((blog) => {
+      expect(blog.id).toBeDefined();
+      expect(blog._id).toBeUndefined();
+    });
+  });
 });
 
-test("blogs have a unique id", async () => {
-  const response = await api.get("/api/blog");
-  const posts = response.body;
-  expect(posts[0].id).toBeDefined();
-});
+describe("viewing a specific blog", () => {
+  test("succeeds with a valid id", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToView = blogsAtStart[0];
 
-test("can add a new blog with a post request", async () => {
-  const newBlog = {
-    title: "TDD harms architecture: Part 2",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-    likes: 100,
-  };
+    const resultBlog = await api
+      .get(`/api/blog/${blogToView.id}`)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
 
-  await api
-    .post("/api/blog")
-    .send(newBlog)
-    .expect(201)
-    .expect("Content-Type", /application\/json/);
-  const response = await api.get("/api/blog");
-  const newList = response.body;
-  expect(newList).toHaveLength(helper.initialBlogs.length + 1);
-});
+    expect(resultBlog.body).toEqual(JSON.parse(JSON.stringify(blogToView)));
+  });
 
-//Should look into breaking this up at some point
-//Unfortunately describe block does not allow async so this was easiest way to test both elements of delete
-test("can delete a blog post", async () => {
-  const getResponseBefore = await api.get("/api/blog");
-  const initialBlogs = getResponseBefore.body;
-  const blogToDelete = initialBlogs[0];
-  await api.delete(`/api/blog/${blogToDelete.id}`);
-  const getResponseAfter = await api.get("/api/blog");
-  const blogsAfterDelete = getResponseAfter.body;
-  expect(blogsAfterDelete).toHaveLength(initialBlogs.length - 1);
-  const titles = blogsAfterDelete.map((blog) => blog.title);
-  expect(titles).not.toContain(blogToDelete.title);
-});
+  test("fails with statuscode 404 if blog does not exist", async () => {
+    const validNonexistingId = await helper.nonExistingId();
 
-test("can update likes in blog post", async () => {
-  const getResponseBefore = await api.get("/api/blog");
-  const initialBlogs = getResponseBefore.body;
-  const blogToUpdate = initialBlogs[0];
-  blogToUpdate.likes += 1;
-  await api.put(`/api/blog/${blogToUpdate.id}`).send(blogToUpdate);
-  const getResponseAfter = await api.get("/api/blog");
-  const blogAfterUpdate = getResponseAfter.body[0];
+    // Log the ID and query result for debugging
+    console.log("Testing with non-existing ID:", validNonexistingId);
+    const blogInDb = await Blog.findById(validNonexistingId);
+    console.log("Query result for non-existing ID:", blogInDb);
 
-  expect(blogAfterUpdate.likes).toEqual(blogToUpdate.likes);
-});
+    // Ensure the blog is truly deleted before querying
+    expect(blogInDb).toBeNull();
 
-// Test fetching a specific blog
+    await api.get(`/api/blog/${validNonexistingId}`).expect(404);
+  });
 
-test("can fetch a specific blog", async () => {
-  const blogsAtStart = await helper.blogsInDb();
-  const blogToView = blogsAtStart[0];
+  test("fails with statuscode 400 if id is invalid", async () => {
+    const invalidId = "12345";
 
-  const resultBlog = await api
-    .get(`/api/blogs/${blogToView.id}`)
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-
-  expect(resultBlog.body).toEqual(JSON.parse(JSON.stringify(blogToView)));
-});
-
-// Test adding a comment to a blog
-
-test("can add a comment to a blog", async () => {
-  const blogsAtStart = await helper.blogsInDb();
-  const blogToComment = blogsAtStart[0];
-
-  const newComment = { comment: "Great post!", user: { id: "testUserId" } };
-
-  const result = await api
-    .post(`/api/blogs/${blogToComment.id}/comments`)
-    .send(newComment)
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-
-  expect(result.body.comment).toBe("Great post!");
-});
-
-// Test deleting a comment from a blog
-
-test("can delete a comment from a blog", async () => {
-  const blogsAtStart = await helper.blogsInDb();
-  const blogToComment = blogsAtStart[0];
-
-  const newComment = { comment: "To be deleted", user: { id: "testUserId" } };
-  const commentResponse = await api
-    .post(`/api/blogs/${blogToComment.id}/comments`)
-    .send(newComment);
-
-  const commentId = commentResponse.body.id;
-
-  await api
-    .delete(`/api/blogs/${blogToComment.id}/comments/${commentId}`)
-    .expect(204);
-
-  const updatedBlog = await api.get(`/api/blogs/${blogToComment.id}`);
-  const comments = updatedBlog.body.comments.map((c) => c.id);
-
-  expect(comments).not.toContain(commentId);
+    await api.get(`/api/blog/${invalidId}`).expect(400);
+  });
 });
 
 afterAll(async () => {

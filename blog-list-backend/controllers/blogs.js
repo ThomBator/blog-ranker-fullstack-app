@@ -39,6 +39,10 @@ blogRouter.get("/:id", async (request, response) => {
       },
     });
 
+  if (!blog) {
+    return response.status(404).json({ error: "Blog not found" });
+  }
+
   response.json(blog);
 });
 

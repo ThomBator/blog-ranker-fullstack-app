@@ -51,13 +51,6 @@ describe("<BlogForm />", () => {
   });
 
   it("submits the form and calls the mutation", async () => {
-    mockCreate.mockResolvedValue({
-      id: "12345",
-      title: "Test Blog Title",
-      author: "Test Author",
-      url: "http://testurl.com",
-    });
-
     renderWithProviders(<BlogForm />);
 
     const titleInput = screen.getByLabelText(/title/i);

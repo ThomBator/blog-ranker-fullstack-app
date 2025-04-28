@@ -136,6 +136,8 @@ const Blog = () => {
     );
   }
 
+  console.log("blog", blog);
+
   return (
     <div className="pageContainer">
       <h1 className={styles.blogHeader}>
