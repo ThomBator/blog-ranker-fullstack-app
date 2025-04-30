@@ -11,6 +11,7 @@ const blogSchema = new mongoose.Schema(
     votes: {
       users: [
         {
+          _id: false, // Prevent subdocument _id generation
           id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",

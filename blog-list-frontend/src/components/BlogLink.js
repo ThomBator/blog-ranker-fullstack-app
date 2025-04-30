@@ -82,9 +82,7 @@ const BlogLink = ({ blog }) => {
         return total + voteUser.vote;
       }, 0);
 
-      const votesForDisplay = initialVotes > 0 ? initialVotes : 0;
-
-      setTotalVotes(votesForDisplay);
+      setTotalVotes(initialVotes);
     }
   }, [blog]);
 
@@ -101,7 +99,8 @@ const BlogLink = ({ blog }) => {
 
       <div className={styles.voteInfo}>
         <p>
-          {totalVotes === 1 ? "Vote: " : "Votes: "} {totalVotes}
+          {totalVotes === 1 || totalVotes === -1 ? "Vote: " : "Votes: "}{" "}
+          {totalVotes}
         </p>
         {user ? (
           <>

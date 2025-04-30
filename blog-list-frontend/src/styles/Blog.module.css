@@ -21,6 +21,20 @@
   margin-left: var(--margin-1);
 }
 
+.commentList {
+  list-style: none;
+  margin-left: var(--margin-0);
+  padding-left: var(--padding-0);
+}
+
+.commentList li {
+  background-color: var(--light-color);
+  padding: var(--padding-2);
+  border-radius: 20px;
+  box-shadow: var(--box-shadow-small);
+  margin-bottom: var(--margin-3);
+}
+
 @media screen and (max-width: 1200px) {
   .postDetails {
     flex-direction: column;

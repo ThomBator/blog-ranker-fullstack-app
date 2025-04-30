@@ -21,7 +21,20 @@ const Home = () => {
 
   const blogs = result.data;
 
-  const byLikes = (b1, b2) => b2.likes - b1.likes;
+  const calculateUserVotes = (blog) => {
+    const votes = blog.votes.users.reduce(
+      (total, user) => (Number(user.vote) || 0) + total,
+      0
+    );
+    return votes;
+  };
+
+  const byVotes = (b1, b2) => {
+    const b1TotalVotes = calculateUserVotes(b1);
+    const b2TotalVotes = calculateUserVotes(b2);
+
+    return b2TotalVotes - b1TotalVotes;
+  };
 
   return (
     <div className="pageContainer">
@@ -56,7 +69,7 @@ const Home = () => {
 
       <main>
         {blogs &&
-          blogs.sort(byLikes).map((blog) => (
+          blogs.sort(byVotes).map((blog) => (
             <div className={styles.listItem} key={blog.id}>
               <BlogLink blog={blog} />
             </div>

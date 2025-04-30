@@ -111,9 +111,7 @@ const Blog = () => {
         return total + voteUser.vote;
       }, 0);
 
-      const votesForDisplay = initialVotes > 0 ? initialVotes : 0;
-
-      setTotalVotes(votesForDisplay);
+      setTotalVotes(initialVotes);
     }
     if (hasBeenDeleted) {
       const timer = setTimeout(() => {
@@ -150,8 +148,9 @@ const Blog = () => {
       <div className={styles.postDetails}>
         <p>
           {" "}
-          {totalVotes} {totalVotes === 1 ? "vote. " : "votes. "} Posted on:{" "}
-          {createLocalDate(blog.createdAt)} by:{" "}
+          {totalVotes}{" "}
+          {totalVotes === 1 || totalVotes === -1 ? "vote. " : "votes. "} Posted
+          on: {createLocalDate(blog.createdAt)} by:{" "}
           <Link to={`/users/${blog.user.id}`}>{blog.user.username}</Link>{" "}
         </p>
         {user && (
@@ -202,13 +201,18 @@ const Blog = () => {
       {user && (
         <div className={styles.commentContainer}>
           <form onSubmit={handleAddComment}>
-            <label>Add a comment</label>
+            <label htmlFor="add_comment">Add a comment</label>
             <textarea
+              id="add_comment"
               className={styles.commentTextArea}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
-            <button className="secondaryButton" type="submit">
+            <button
+              className="secondaryButton"
+              type="submit"
+              aria-label="Add comment"
+            >
               Add Comment
             </button>
           </form>{" "}
@@ -221,7 +225,7 @@ const Blog = () => {
         ) : (
           <p>No comments yet. Log in to add one!</p>
         ))}
-      <ul>
+      <ul className={styles.commentList}>
         {blog.comments.map((comment) => (
           <li key={comment.id}>
             <p>{comment.comment}</p>

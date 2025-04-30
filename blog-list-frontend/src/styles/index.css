@@ -87,6 +87,11 @@ button:hover {
   flex-direction: column;
 }
 
+.deleteButton {
+  padding-left: var(--padding-0);
+  margin-left: var(--margin-0);
+}
+
 .voteArrow,
 .deleteButton {
   color: var(--dark-color);
