@@ -1,6 +1,6 @@
 ![Story Ranker Screenshot](./story-ranker-screenshot.png)
 
-## A full-stack, "Hacker News" inspired application that enables users to share, like, and comment on blog posts.
+## 🏆 A full-stack, "Hacker News" inspired application that enables users to share, like, and comment on blog posts.
 
 ## Technologies Used
 
