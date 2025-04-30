@@ -2,8 +2,6 @@
 
 ## 🏆 A full-stack, "Hacker News" inspired application that enables users to share, like, and comment on blog posts.
 
-[View Loom Video Walthrough](https://www.loom.com/share/beca105d1bc84dd98418d1ab416f9ee3)
-
 ## Technologies Used
 
 - **Frontend:** React, React Router, React Query, CSS Modules
